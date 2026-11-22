@@ -10,7 +10,7 @@ import {
   type PromptEvaluation,
   type RunReport,
   type Verdict,
-} from "./types";
+} from "./types.ts";
 
 /**
  * The pipeline orchestrator runs in the browser and calls small, fast API
