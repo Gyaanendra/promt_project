@@ -1,4 +1,4 @@
-import { getModelConfig, type ModelConfig, type Role } from "./config.ts";
+import { getModelConfig, type ModelConfig, type Role } from "./config";
 
 export interface ChatMessage {
   role: "user" | "assistant";
