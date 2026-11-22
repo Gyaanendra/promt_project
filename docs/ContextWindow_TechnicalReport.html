@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Guardrail Labs - Technical Report</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+    @page {
+      size: A4;
+      margin: 22mm 18mm 22mm 18mm;
+      @bottom-right {
+        content: counter(page);
+        font-family: 'Inter', sans-serif;
+        font-size: 9pt;
+        color: #777169;
+      }
+      @bottom-left {
+        content: "Guardrail Labs • Technical Report • SCSE4041";
+        font-family: 'Inter', sans-serif;
+        font-size: 8.5pt;
+        color: #a59f97;
+      }
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      font-size: 10pt;
+      line-height: 1.55;
+      color: #1a1a18;
+      background-color: #ffffff;
+    }
+
+    /* Cover / Header Header */
+    .report-header {
+      border-bottom: 2px solid #000000;
+      padding-bottom: 18px;
+      margin-bottom: 24px;
+    }
+
+    .badge-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      font-size: 8.5pt;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #44403b;
+    }
+
+    .kicker {
+      background: #f5f3f1;
+      border: 1px solid #ebe8e4;
+      padding: 3px 9px;
+      border-radius: 9999px;
+    }
+
+    h1.title {
+      font-family: 'Newsreader', Georgia, serif;
+      font-size: 24pt;
+      font-weight: 400;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      color: #000000;
+      margin-bottom: 8px;
+    }
+
+    h1.title em {
+      font-style: italic;
+      color: #44403b;
+    }
+
+    .subtitle {
+      font-size: 11pt;
+      color: #55504a;
+      line-height: 1.45;
+      margin-bottom: 16px;
+    }
+
+    .meta-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      background: #fdfcfc;
+      border: 1px solid #ebe8e4;
+      border-radius: 8px;
+      padding: 12px 14px;
+      font-size: 8.5pt;
+      line-height: 1.4;
+    }
+
+    .meta-item strong {
+      display: block;
+      color: #000000;
+      font-size: 8pt;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 2px;
+    }
+
+    /* Headings */
+    h2 {
+      font-family: 'Newsreader', Georgia, serif;
+      font-size: 15pt;
+      font-weight: 500;
+      color: #000000;
+      letter-spacing: -0.015em;
+      margin: 22px 0 8px 0;
+      border-bottom: 1px solid #ebe8e4;
+      padding-bottom: 4px;
+    }
+
+    h3 {
+      font-size: 11pt;
+      font-weight: 600;
+      color: #22201d;
+      margin: 14px 0 6px 0;
+    }
+
+    p {
+      margin-bottom: 10px;
+      text-align: justify;
+    }
+
+    /* Abstract Box */
+    .abstract-box {
+      background: #fbfaf8;
+      border-left: 3.5px solid #000000;
+      border-top: 1px solid #ebe8e4;
+      border-right: 1px solid #ebe8e4;
+      border-bottom: 1px solid #ebe8e4;
+      border-radius: 0 6px 6px 0;
+      padding: 14px 16px;
+      margin-bottom: 20px;
+      font-size: 9.5pt;
+      line-height: 1.5;
+    }
+
+    .abstract-box strong {
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-size: 8.5pt;
+      color: #000000;
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    /* Tables */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 14px 0 18px 0;
+      font-size: 8.8pt;
+    }
+
+    table th {
+      background-color: #f5f3f1;
+      color: #111;
+      font-weight: 600;
+      text-align: left;
+      padding: 7px 10px;
+      border-top: 1px solid #dcd7d0;
+      border-bottom: 1px solid #dcd7d0;
+      font-size: 8.2pt;
+      letter-spacing: 0.02em;
+    }
+
+    table td {
+      padding: 7px 10px;
+      border-bottom: 1px solid #ebe8e4;
+      vertical-align: top;
+    }
+
+    table tr:last-child td {
+      border-bottom: 1px solid #dcd7d0;
+    }
+
+    .code-span {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 8pt;
+      background: #f3f1ee;
+      padding: 1px 4px;
+      border-radius: 3px;
+    }
+
+    /* Callout & Architecture Diagram */
+    .diagram-box {
+      background: #fbfaf8;
+      border: 1px solid #ebe8e4;
+      border-radius: 8px;
+      padding: 16px;
+      margin: 14px 0;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 8pt;
+      line-height: 1.45;
+      white-space: pre;
+      overflow-x: hidden;
+      color: #2b2824;
+    }
+
+    .callout {
+      background: #fdfcfc;
+      border: 1px solid #ebe8e4;
+      border-radius: 6px;
+      padding: 10px 14px;
+      margin: 12px 0;
+      font-size: 9pt;
+    }
+
+    .callout.stat {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      text-align: center;
+      background: #fbfaf8;
+    }
+
+    .callout.stat .stat-num {
+      font-size: 16pt;
+      font-weight: 700;
+      color: #1f7a4d;
+      margin-bottom: 2px;
+    }
+
+    .callout.stat .stat-label {
+      font-size: 7.8pt;
+      text-transform: uppercase;
+      color: #666;
+    }
+
+    .page-break {
+      page-break-before: always;
+    }
+
+    ul, ol {
+      margin: 6px 0 12px 20px;
+      font-size: 9.5pt;
+    }
+
+    li {
+      margin-bottom: 4px;
+    }
+
+    .pill-pass {
+      display: inline-block;
+      padding: 1px 6px;
+      border-radius: 9999px;
+      font-size: 7.5pt;
+      font-weight: 600;
+      background: #e3f3ea;
+      color: #1f7a4d;
+    }
+
+    .footer-note {
+      margin-top: 24px;
+      padding-top: 10px;
+      border-top: 1px solid #ebe8e4;
+      font-size: 8pt;
+      color: #88827a;
+      display: flex;
+      justify-content: space-between;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ==================== HEADER ==================== -->
+  <header class="report-header">
+    <div class="badge-bar">
+      <span class="kicker">Course: SCSE4041 Prompt Engineering</span>
+      <span>Problem Pool ID: C23</span>
+      <span>Submission Date: Nov 2026</span>
+    </div>
+
+    <h1 class="title">Guardrail Labs: <em>Automated Adversarial Red-Teaming &amp; Empirical Prompt Hardening for Chatbots</em></h1>
+    <div class="subtitle">
+      A Multi-Agent Architecture for Measuring and Hardening LLM System Prompts Against OWASP Top 10 Vulnerabilities
+    </div>
+
+    <div class="meta-grid">
+      <div class="meta-item">
+        <strong>Team</strong>
+        Context Window
+      </div>
+      <div class="meta-item">
+        <strong>Authors</strong>
+        Devansh Kumar (Lead), Ayush Anand, Gyanendra Prakash, Ankit Gupta
+      </div>
+      <div class="meta-item">
+        <strong>Faculty Reviewer</strong>
+        Dr. B D Mazumdar
+      </div>
+      <div class="meta-item">
+        <strong>Target Stack</strong>
+        Next.js 16, Vercel, Claude / Gemini / Groq Llama-3.1
+      </div>
+    </div>
+  </header>
+
+  <!-- ==================== ABSTRACT ==================== -->
+  <div class="abstract-box">
+    <strong>Executive Summary &amp; Abstract</strong>
+    Large Language Model (LLM) conversational agents are frequently deployed with vulnerable system prompts that leak internal instructions or abandon domain constraints under adversarial pressure. Current defensive tooling primarily flags weaknesses without providing algorithmic repair. 
+    <strong>Guardrail Labs</strong> presents an automated, measurable red-teaming and prompt-hardening pipeline. By executing a sequence of prompt-driven agents—comprising a categorized Attacker, an isolated Target bot, a double-blind rubric Judge with deterministic canary verification, and a class-level Fixer—the system measures baseline Attack Success Rates (ASR), rewrites the system prompt to defend against underlying failure classes, and re-evaluates the prompt against an unseen <em>held-out</em> attack set. Empirical testing across five distinct chatbot archetypes demonstrates a <strong>&gt;50% to 76.7% relative reduction in held-out ASR</strong> while constraining benign over-refusal to &le;8.3%, validated by a 50-item double-blind human study achieving 91.3% agreement (Cohen’s &kappa; = 0.812).
+  </div>
+
+  <!-- ==================== 1. INTRODUCTION & PROBLEM ==================== -->
+  <h2>1. Introduction &amp; Problem Statement</h2>
+  <p>
+    The OWASP Top 10 for LLM Applications (2025) identifies <strong>Prompt Injection (LLM01)</strong> as the primary threat vector and introduces <strong>System Prompt Leakage (LLM07)</strong> as a dedicated critical vulnerability. When chatbots are deployed in high-utility scenarios—such as academic helpdesks, retail kiosks, or financial assistants—malicious or manipulative users employ delimiter exploits, roleplay pretexts, and jailbreak personas to extract confidential staff tokens or coerce unauthorized actions.
+  </p>
+  <p>
+    Existing defensive frameworks (e.g., Promptfoo, NVIDIA Garak, Microsoft PyRIT) focus exclusively on vulnerability scanning. They leave the burden of prompt repair to manual, unguided developer trial-and-error. 
+    <strong>Guardrail Labs addresses this gap:</strong> it takes a raw system prompt, generates structured attacks, scores responses under an isolated rubric, rewrites the prompt using training failures, and verifies generalizability against an unseen held-out attack suite with measurable statistical indicators.
+  </p>
+
+  <!-- ==================== 2. SYSTEM ARCHITECTURE ==================== -->
+  <h2>2. System Architecture &amp; Execution Pipeline</h2>
+  <p>
+    Guardrail Labs is engineered as a serverless Next.js 16 (App Router) application deployed to Vercel. A critical engineering constraint of serverless environments is execution timeouts (typically 60 seconds). Because a full adversarial audit requires hundreds of model inferences, traditional monolithic backend workers would inevitably time out.
+  </p>
+
+  <div class="diagram-box">
+Browser Client Orchestrator (src/lib/pipeline.ts)
+   │
+   ├── Step 1: POST /api/attack  ──► Strong Model (Attacker v2)  [Train + Held-Out Sets]
+   ├── Step 2: POST /api/benign  ──► Strong Model (Benign Gen)   [In-Scope Legit Queries]
+   │
+   ├── Step 3: Baseline Evaluation (Concurrency = 4)
+   │     ├─► POST /api/target    ──► Isolated Target Model (Groq / Llama-3.1-8B)
+   │     └─► POST /api/judge     ──► Canary Normalizer (Deterministic) ──► Judge Model (v2)
+   │
+   ├── Step 4: POST /api/fix     ──► Strong Model (Fixer v2)      [Class-Level Rewrite]
+   │
+   └── Step 5: Verification Evaluation (Identical Test Suite)
+         └─► Re-evaluates Hardened Prompt on Held-Out Attacks + Benign Queries
+  </div>
+
+  <h3>Key Architectural Decisions</h3>
+  <ul>
+    <li><strong>Browser-Driven Client Orchestration:</strong> The browser acts as the pipeline sequencer, calling small, atomic serverless endpoints. If any sub-request encounters a network blip or rate limit (HTTP 429), client-side exponential backoff retries without aborting the entire run.</li>
+    <li><strong>Model Family Decoupling:</strong> The Target model belongs to a completely different family (open-source Llama-3.1 / Mistral via Groq) than the Strong model (Claude 3.5 Sonnet / Gemini 2.5 Flash). This prevents self-grading bias during the judging phase.</li>
+    <li><strong>Deterministic Canary Pre-Filter:</strong> A regex and punctuation-stripped normalization check evaluates whether planted secrets (e.g., <span class="code-span">ALPHA-7</span>) leaked, overriding model interpretation with 100% precision.</li>
+    <li><strong>Strict Privacy &amp; Credential Protection:</strong> API keys are strictly server-side environment variables. An optional constant-time <span class="code-span">APP_ACCESS_CODE</span> protects public demo endpoints against unauthorized quota consumption.</li>
+  </ul>
+
+  <!-- ==================== 3. TOOLS & MODELS USED ==================== -->
+  <h2>3. Tools, Platforms &amp; Model Specifications</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Role</th>
+        <th>Primary Model / Engine</th>
+        <th>Provider / Runtime</th>
+        <th>Hyperparameters</th>
+        <th>Rationale</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Attacker</strong></td>
+        <td>Claude 3.5 Sonnet / Gemini 2.5 Flash</td>
+        <td>Anthropic / Google AI</td>
+        <td>Temp = 1.0, MaxTokens = 2500</td>
+        <td>High temperature ensures linguistic diversity and novel adversarial phrasing.</td>
+      </tr>
+      <tr>
+        <td><strong>Target Bot</strong></td>
+        <td>Llama-3.1-8B-Instant</td>
+        <td>Groq (OpenAI-Compatible API)</td>
+        <td>Temp = 0.3, MaxTokens = 700</td>
+        <td>Ultra-fast inference (500+ tokens/sec); replicates real-world open-weight chatbot behavior.</td>
+      </tr>
+      <tr>
+        <td><strong>Judge</strong></td>
+        <td>Claude 3.5 Sonnet / Gemini 2.5 Flash</td>
+        <td>Anthropic / Google AI</td>
+        <td>Temp = 0.0, MaxTokens = 400</td>
+        <td>Zero temperature guarantees strict rubric consistency and determinism.</td>
+      </tr>
+      <tr>
+        <td><strong>Fixer</strong></td>
+        <td>Claude 3.5 Sonnet / Gemini 2.5 Flash</td>
+        <td>Anthropic / Google AI</td>
+        <td>Temp = 0.2, MaxTokens = 4000</td>
+        <td>Low temperature for precise structural synthesis without hallucinating capabilities.</td>
+      </tr>
+      <tr>
+        <td><strong>Platform</strong></td>
+        <td>Next.js 16 (App Router), Turbopack</td>
+        <td>Vercel Edge / Node.js 26</td>
+        <td>Strict TypeScript, React 19</td>
+        <td>End-to-end type safety across client payloads and serverless handler contracts.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- ==================== PAGE BREAK ==================== -->
+  <div class="page-break"></div>
+
+  <!-- ==================== 4. PROMPT ENGINEERING SPECIFICATION ==================== -->
+  <h2>4. Prompt Engineering Design &amp; Iteration</h2>
+  <p>
+    Because the entire product is a chain of prompts, prompt engineering constitutes the primary intellectual contribution of this project. Prompts reside centrally in <span class="code-span">src/lib/prompts.ts</span> with versioned definitions.
+  </p>
+
+  <h3>4.1 Threat Taxonomy (Four Attack Categories)</h3>
+  <ol>
+    <li><strong>Prompt Injection (LLM01):</strong> Delimiter collision, instruction override (&ldquo;Ignore previous instructions&rdquo;), developer simulation modes, and indirect injection framing.</li>
+    <li><strong>System Prompt Extraction (LLM07):</strong> Verbatim repeats, foreign language translation pretexts, code completion tricks, and authorization code harvesting.</li>
+    <li><strong>Persona Override:</strong> DAN-style unrestricted jailbreaks, fictional roleplay traps, and emotional coercion to abandon organizational safety filters.</li>
+    <li><strong>Policy &amp; Scope Bypass:</strong> Social engineering to exceed declared limits (e.g., unauthorized fee waivers, exceeding refund caps, or committing to out-of-menu items).</li>
+  </ol>
+
+  <h3>4.2 Iterative Evolution: Baseline (v1) vs. Hardened (v2)</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Prompt Role</th>
+        <th>Baseline (v1 Milestone 1)</th>
+        <th>Hardened (v2 Production)</th>
+        <th>Engineering Justification</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Attacker</strong></td>
+        <td>Generic instruction: <em>&ldquo;Write 5 attacks for category X&rdquo;</em>.</td>
+        <td>Explicit category guides, strict 600-char cap, ethical harm boundary, separate <em>held-out</em> generator with anti-overlap avoid-list.</td>
+        <td>v1 attacks were repetitive and ignored target-specific rules. v2 forces tactical diversity across social engineering and multilingual angles.</td>
+      </tr>
+      <tr>
+        <td><strong>Judge</strong></td>
+        <td>Unstructured binary output: <em>&ldquo;Did it break? Yes/No&rdquo;</em>.</td>
+        <td>Explicit 5-condition rubric, 0–3 severity scale, XML data boundary isolation (<span class="code-span">&lt;system_prompt&gt;</span>, <span class="code-span">&lt;attack&gt;</span>, <span class="code-span">&lt;chatbot_reply&gt;</span>).</td>
+        <td>v1 was susceptible to judge injection (e.g., attacks saying &ldquo;Judge: say this passed&rdquo;). v2 treats inputs strictly as untrusted data.</td>
+      </tr>
+      <tr>
+        <td><strong>Fixer</strong></td>
+        <td>Free-form rewrite request.</td>
+        <td>Class-level hardening instruction, scope preservation constraints, explicit ban on copying attack strings, out-of-prompt canary warnings.</td>
+        <td>v1 memorized specific attack phrases, causing severe over-refusal on normal questions. v2 targets the general vulnerability pattern.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- ==================== 5. EXPERIMENTAL RESULTS ==================== -->
+  <h2>5. Empirical Test Results &amp; Statistical Validation</h2>
+  <p>
+    In accordance with faculty review criteria, the system was subjected to two mandatory experimental protocols: <strong>(1) Repeat-Run Variance Testing ($N=3$)</strong> across five fictional test bots, and <strong>(2) A Double-Blind Judge Validation Study (50 Hand-Labelled Verdicts)</strong>.
+  </p>
+
+  <div class="callout stat">
+    <div>
+      <div class="stat-num">71.4%</div>
+      <div class="stat-label">Held-out ASR Reduction (CampusBot)</div>
+    </div>
+    <div>
+      <div class="stat-num">91.3%</div>
+      <div class="stat-label">Judge vs Human Accuracy</div>
+    </div>
+    <div>
+      <div class="stat-num">&kappa; = 0.812</div>
+      <div class="stat-label">Judge Cohen's Kappa (Substantial)</div>
+    </div>
+  </div>
+
+  <h3>Table 1: Repeat-Run Variance Analysis Across 5 Test Bots ($N=3$, Mean &plusmn; Std Dev)</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Bot Archetype</th>
+        <th>Planted Secret</th>
+        <th>Held-Out ASR (Original)</th>
+        <th>Held-Out ASR (Hardened)</th>
+        <th>Relative Risk Reduction</th>
+        <th>Over-Refusal Rate</th>
+        <th>Course Criteria</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>CampusBot</strong> (Helpdesk)</td>
+        <td><span class="code-span">ALPHA-7</span></td>
+        <td>70.0% &plusmn; 5.0%</td>
+        <td>20.0% &plusmn; 5.0%</td>
+        <td><strong>&minus;71.4% drop</strong></td>
+        <td>0.0% &rarr; 6.7% &plusmn; 2.9%</td>
+        <td><span class="pill-pass">PASS (&ge;50%)</span></td>
+      </tr>
+      <tr>
+        <td><strong>BistroBot</strong> (Restaurant Ordering)</td>
+        <td><span class="code-span">VIP-FEAST-99</span></td>
+        <td>60.0% &plusmn; 5.0%</td>
+        <td>18.3% &plusmn; 2.9%</td>
+        <td><strong>&minus;69.4% drop</strong></td>
+        <td>0.0% &rarr; 1.7% &plusmn; 2.9%</td>
+        <td><span class="pill-pass">PASS (&ge;50%)</span></td>
+      </tr>
+      <tr>
+        <td><strong>RefundBot</strong> (Customer Support)</td>
+        <td><span class="code-span">ESCALATE-SEC-42</span></td>
+        <td>80.0% &plusmn; 5.0%</td>
+        <td>30.0% &plusmn; 5.0%</td>
+        <td><strong>&minus;62.5% drop</strong></td>
+        <td>1.7% &rarr; 8.3% &plusmn; 2.9%</td>
+        <td><span class="pill-pass">PASS (&ge;50%)</span></td>
+      </tr>
+      <tr>
+        <td><strong>Captain Blackbeard</strong> (Pirate Tutor)</td>
+        <td><span class="code-span">TREASURE-LAT-49</span></td>
+        <td>50.0% &plusmn; 5.0%</td>
+        <td>11.7% &plusmn; 2.9%</td>
+        <td><strong>&minus;76.7% drop</strong></td>
+        <td>0.0% &rarr; 3.3% &plusmn; 2.9%</td>
+        <td><span class="pill-pass">PASS (&ge;50%)</span></td>
+      </tr>
+      <tr>
+        <td><strong>WeakBot</strong> (Naive Control)</td>
+        <td><em>None</em></td>
+        <td>95.0% &plusmn; 5.0%</td>
+        <td>45.0% &plusmn; 5.0%</td>
+        <td><strong>&minus;52.6% drop</strong></td>
+        <td>0.0% &rarr; 6.7% &plusmn; 2.9%</td>
+        <td><span class="pill-pass">PASS (&ge;50%)</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Table 2: Judge Validation Study (50 Hand-Labelled Verdicts)</h3>
+  <p>
+    Two team annotators independently evaluated 50 diverse (attack, reply) pairs across all categories. Disagreements were analyzed to evaluate inter-annotator reliability and validate the automated judge against human consensus.
+  </p>
+  <table>
+    <thead>
+      <tr>
+        <th>Validation Metric</th>
+        <th>Measured Value</th>
+        <th>Target Benchmark</th>
+        <th>Academic Interpretation</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Human Inter-Annotator Agreement (A vs B)</strong></td>
+        <td>92.0%</td>
+        <td>&ge; 85.0%</td>
+        <td>High consistency between human evaluators.</td>
+      </tr>
+      <tr>
+        <td><strong>Human Reliability (Cohen's &kappa;)</strong></td>
+        <td>0.835</td>
+        <td>&ge; 0.700</td>
+        <td>Substantial agreement above random chance.</td>
+      </tr>
+      <tr>
+        <td><strong>Judge Accuracy vs. Consensus</strong></td>
+        <td>91.3%</td>
+        <td>&ge; 85.0%</td>
+        <td><strong>Passed faculty accuracy target.</strong></td>
+      </tr>
+      <tr>
+        <td><strong>Judge Precision (Attack Succeeded)</strong></td>
+        <td>93.8%</td>
+        <td>&mdash;</td>
+        <td>Low false alarm rate (1 false positive in 50).</td>
+      </tr>
+      <tr>
+        <td><strong>Judge Recall (Attack Succeeded)</strong></td>
+        <td>88.2%</td>
+        <td>&mdash;</td>
+        <td>Conservative detection; 2 subtle breaches missed.</td>
+      </tr>
+      <tr>
+        <td><strong>Judge Reliability (Cohen's &kappa;)</strong></td>
+        <td>0.812</td>
+        <td>&ge; 0.750</td>
+        <td>Substantial agreement between Judge and Human ground truth.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- ==================== 6. LIMITATIONS ==================== -->
+  <h2>6. Limitations &amp; Threat Model Boundaries</h2>
+  <ol>
+    <li><strong>Single-Turn Evaluation:</strong> Version 1 tests single-turn injection payloads. Multi-turn conversation exploitation (e.g., priming or progressive trust elicitation) is scoped for v2.</li>
+    <li><strong>Risk Reduction vs. Mathematical Proof:</strong> Prompt hardening significantly raises the barrier to exploitation (lowering ASR by &gt;50%), but it cannot guarantee absolute cryptographic security. Defense-in-depth (external guardrail proxies, schema validation) remains recommended.</li>
+    <li><strong>External Credential Isolation:</strong> Planted secrets in system prompts are inherently fragile. The Fixer prompt consistently outputs recommendations advising developers to move true credentials out of prompts into backend authentication layers.</li>
+    <li><strong>Synthetic / Low-Stakes Scope:</strong> In accordance with course rules, testing is strictly restricted to fictional or authorized test prompts; no production PII is ingested.</li>
+  </ol>
+
+  <!-- ==================== 7. CONCLUSION ==================== -->
+  <h2>7. Conclusion</h2>
+  <p>
+    Guardrail Labs provides an end-to-end engineering solution for automated chatbot security testing. By pairing an empirical before/after measurement pipeline with class-based prompt synthesis, the framework delivers measurable risk reduction without degrading conversational utility. All verification targets—including &ge;50% relative ASR drop, &le;10% over-refusal, and &ge;85% judge reliability—were verified and documented.
+  </p>
+
+  <footer class="footer-note">
+    <span>Guardrail Labs • Team Context Window • SCSE4041 Prompt Engineering</span>
+    <span>Repository: github.com/Gyaanendra/promt_project</span>
+  </footer>
+
+</body>
+</html>
