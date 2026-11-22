@@ -16,9 +16,10 @@ export default function MindlyHero() {
       style={{
         position: "relative",
         overflow: "hidden",
-        paddingTop: "28px",
-        paddingBottom: "80px",
+        paddingTop: "24px",
+        paddingBottom: "32px",
         width: "100%",
+        backgroundColor: "var(--color-eggshell)",
       }}
     >
       {/* FULL-WIDTH CONTAINER WITH FLUID GUTTERS */}
@@ -31,7 +32,7 @@ export default function MindlyHero() {
           position: "relative",
         }}
       >
-        {/* TOP RIGHT ROTATING STAMP (Fixed fluidly to top-right flank) */}
+        {/* TOP RIGHT ROTATING STAMP */}
         <div
           className="hero-stamp-seal desktop-only"
           style={{
@@ -41,7 +42,7 @@ export default function MindlyHero() {
             width: "94px",
             height: "94px",
             pointerEvents: "none",
-            zIndex: 10,
+            zIndex: 20,
           }}
         >
           <svg viewBox="0 0 100 100" className="rotating-stamp" style={{ width: "100%", height: "100%" }}>
@@ -56,7 +57,6 @@ export default function MindlyHero() {
               </textPath>
             </text>
             <circle cx="50" cy="50" r="13" fill="var(--color-eggshell)" stroke="var(--color-stone)" strokeWidth="1" />
-            {/* 4-point star in center */}
             <path
               d="M50 42C50 46.5 53.5 50 58 50C53.5 50 50 53.5 50 58C50 53.5 46.5 50 42 50C46.5 50 50 46.5 50 42Z"
               fill="var(--color-ink)"
@@ -64,18 +64,27 @@ export default function MindlyHero() {
           </svg>
         </div>
 
-        {/* CENTERED HEADLINE & SUBTITLE (Matching Mindly headline) */}
-        <div style={{ textAlign: "center", maxWidth: "920px", margin: "0 auto 36px" }}>
+        {/* CENTERED HEADLINE & SUBTITLE */}
+        <div
+          className="hero-header-content"
+          style={{
+            textAlign: "center",
+            maxWidth: "920px",
+            margin: "0 auto",
+            position: "relative",
+            zIndex: 15,
+          }}
+        >
           <h1
             className="hero-headline"
             style={{
               fontFamily: "var(--font-display)",
-              fontSize: "clamp(44px, 6.2vw, 82px)",
+              fontSize: "clamp(46px, 6.4vw, 86px)",
               fontWeight: 400,
-              lineHeight: 1.05,
+              lineHeight: 1.04,
               letterSpacing: "-0.025em",
               color: "var(--color-ink)",
-              marginBottom: "20px",
+              marginBottom: "18px",
             }}
           >
             A safer prompt
@@ -97,18 +106,33 @@ export default function MindlyHero() {
               lineHeight: 1.6,
               color: "var(--color-smoke)",
               maxWidth: "640px",
-              margin: "0 auto 30px",
+              margin: "0 auto 28px",
             }}
           >
             Guardrail Labs helps you stress-test prompts, eliminate vulnerabilities, and ensure compliance &mdash; all in one automated security lab.
           </p>
 
-          {/* DUAL PILL BUTTONS (Matching Mindly CTAs) */}
-          <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "14px", flexWrap: "wrap" }}>
+          {/* DUAL PILL BUTTONS (Floats with delicate overlap on the top fringe of the centerpiece) */}
+          <div
+            className="hero-cta-group"
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              gap: "14px",
+              flexWrap: "wrap",
+              position: "relative",
+              zIndex: 16,
+            }}
+          >
             <Link
               href="/app"
               className="btn-pill btn-pill-primary"
-              style={{ padding: "13px 30px", fontSize: "15px" }}
+              style={{
+                padding: "13px 32px",
+                fontSize: "15px",
+                boxShadow: "0 8px 24px rgba(0, 0, 0, 0.16)",
+              }}
             >
               <span>Get started free</span>
               <svg width="15" height="15" viewBox="0 0 16 16" fill="none">
@@ -119,9 +143,14 @@ export default function MindlyHero() {
             <a
               href="#interactive-demo"
               className="btn-pill btn-pill-secondary"
-              style={{ padding: "13px 26px", fontSize: "15px" }}
+              style={{
+                padding: "13px 28px",
+                fontSize: "15px",
+                boxShadow: "0 6px 20px rgba(0, 0, 0, 0.08)",
+                backdropFilter: "blur(10px)",
+                WebkitBackdropFilter: "blur(10px)",
+              }}
             >
-              {/* Play Icon */}
               <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
                 <circle cx="8" cy="8" r="7" stroke="currentColor" strokeWidth="1.25"/>
                 <polygon points="6.5,5 11.5,8 6.5,11" fill="currentColor"/>
@@ -131,20 +160,21 @@ export default function MindlyHero() {
           </div>
         </div>
 
-        {/* FULL-WIDTH HERO STAGE */}
+        {/* FULL-WIDTH HERO STAGE (CALIBRATED OVERLAP BEHIND BUTTONS) */}
         <div
           className="hero-stage"
           style={{
             position: "relative",
             width: "100%",
-            minHeight: "640px",
-            margin: "16px 0 0 0",
+            minHeight: "680px",
+            marginTop: "clamp(-52px, -3.8vw, -28px)",
+            zIndex: 1,
           }}
         >
-          {/* FLUID BEZIER CONNECTOR STRINGS ACROSS FULL WIDTH */}
+          {/* FLUID BEZIER CONNECTOR STRINGS */}
           <svg
             className="hero-bezier-lines desktop-only"
-            viewBox="0 0 1000 640"
+            viewBox="0 0 1000 680"
             preserveAspectRatio="none"
             fill="none"
             style={{
@@ -154,44 +184,43 @@ export default function MindlyHero() {
               width: "100%",
               height: "100%",
               pointerEvents: "none",
-              zIndex: 1,
+              zIndex: 2,
             }}
           >
-            {/* Left curve: From left card (~17%) to expanded centerpiece halo (~36%) */}
+            {/* Left curve: From left card (~18%) to centerpiece cards (~35%) */}
             <path
-              d="M 170 240 C 240 240, 290 330, 360 360"
+              d="M 180 300 C 250 300, 290 380, 360 400"
               stroke="#ebe8e4"
               strokeWidth="1.5"
               strokeDasharray="4 4"
             />
-            {/* Right curve: From expanded centerpiece halo (~64%) to right card (~83%) */}
+            {/* Right curve: From centerpiece cards (~65%) to right card (~82%) */}
             <path
-              d="M 640 360 C 710 330, 760 260, 830 260"
+              d="M 640 400 C 710 380, 750 320, 820 320"
               stroke="#ebe8e4"
               strokeWidth="1.5"
               strokeDasharray="4 4"
             />
           </svg>
 
-          {/* LEFT OUTER FLOATING CARD (Anchored to Left Flank) */}
+          {/* LEFT OUTER FLOATING CARD */}
           <div
             className="hero-floating-card-left desktop-only"
             style={{
               position: "absolute",
-              top: "140px",
+              top: "220px",
               left: "clamp(12px, 2.5vw, 44px)",
-              width: "216px",
-              backgroundColor: "rgba(253, 252, 252, 0.95)",
+              width: "220px",
+              backgroundColor: "rgba(253, 252, 252, 0.94)",
               backdropFilter: "blur(14px)",
               WebkitBackdropFilter: "blur(14px)",
               border: "1px solid var(--color-stone)",
               borderRadius: "20px",
               padding: "22px 20px",
               boxShadow: "var(--shadow-floating)",
-              zIndex: 5,
+              zIndex: 12,
             }}
           >
-            {/* Waveform / Shield vector icon plate */}
             <div
               style={{
                 width: "38px",
@@ -221,14 +250,14 @@ export default function MindlyHero() {
             </p>
           </div>
 
-          {/* BOTTOM LEFT TRUST BADGE (Anchored to Bottom-Left Flank) */}
+          {/* BOTTOM LEFT TRUST BADGE */}
           <div
             className="hero-trust-left desktop-only"
             style={{
               position: "absolute",
-              bottom: "32px",
+              bottom: "40px",
               left: "clamp(12px, 2.5vw, 44px)",
-              zIndex: 5,
+              zIndex: 12,
             }}
           >
             <div style={{ width: "26px", height: "1px", backgroundColor: "var(--color-ash)", marginBottom: "10px" }} />
@@ -283,25 +312,24 @@ export default function MindlyHero() {
             </div>
           </div>
 
-          {/* RIGHT OUTER FLOATING CARD (Anchored to Right Flank) */}
+          {/* RIGHT OUTER FLOATING CARD */}
           <div
             className="hero-floating-card-right desktop-only"
             style={{
               position: "absolute",
-              top: "160px",
+              top: "230px",
               right: "clamp(12px, 2.5vw, 44px)",
-              width: "216px",
-              backgroundColor: "rgba(253, 252, 252, 0.95)",
+              width: "220px",
+              backgroundColor: "rgba(253, 252, 252, 0.94)",
               backdropFilter: "blur(14px)",
               WebkitBackdropFilter: "blur(14px)",
               border: "1px solid var(--color-stone)",
               borderRadius: "20px",
               padding: "22px 20px",
               boxShadow: "var(--shadow-floating)",
-              zIndex: 5,
+              zIndex: 12,
             }}
           >
-            {/* Top Avatar Group */}
             <div style={{ display: "flex", alignItems: "center", marginBottom: "14px" }}>
               {[
                 { name: "BD", bg: "#e8ece8" },
@@ -352,14 +380,14 @@ export default function MindlyHero() {
             </p>
           </div>
 
-          {/* BOTTOM RIGHT ACCENT (Anchored to Bottom-Right Flank) */}
+          {/* BOTTOM RIGHT ACCENT */}
           <div
             className="hero-accent-right desktop-only"
             style={{
               position: "absolute",
-              bottom: "32px",
+              bottom: "40px",
               right: "clamp(12px, 2.5vw, 44px)",
-              zIndex: 5,
+              zIndex: 12,
               textAlign: "right",
             }}
           >
@@ -379,30 +407,46 @@ export default function MindlyHero() {
             </div>
           </div>
 
-          {/* EXPANDED CENTERPIECE: TRANSPARENT PNG WITH NO BACKGROUND */}
+          {/* MONUMENTAL BLACK AND WHITE CENTERPIECE ARTIFACT (MAIN ATTRACTION POINT) */}
           <div
             className="hero-centerpiece"
             style={{
               position: "relative",
               width: "100%",
-              maxWidth: "1040px",
+              maxWidth: "1140px",
               margin: "0 auto",
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
               justifyContent: "flex-end",
-              minHeight: "620px",
+              minHeight: "680px",
               zIndex: 3,
             }}
           >
+            {/* Subtle atmospheric radial spotlight behind the centerpiece */}
+            <div
+              style={{
+                position: "absolute",
+                top: "10%",
+                left: "50%",
+                transform: "translateX(-50%)",
+                width: "80%",
+                height: "75%",
+                background: "radial-gradient(ellipse 65% 55% at 50% 50%, rgba(0, 0, 0, 0.035) 0%, rgba(253, 252, 252, 0) 72%)",
+                pointerEvents: "none",
+                zIndex: 1,
+              }}
+            />
+
             <div
               style={{
                 position: "relative",
                 width: "100%",
-                maxWidth: "960px",
+                maxWidth: "1080px",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
+                zIndex: 2,
               }}
             >
               <img
@@ -411,13 +455,15 @@ export default function MindlyHero() {
                 style={{
                   width: "100%",
                   height: "auto",
-                  maxHeight: "660px",
+                  maxHeight: "720px",
                   objectFit: "contain",
-                  WebkitMaskImage: "linear-gradient(to bottom, black 88%, transparent 100%)",
-                  maskImage: "linear-gradient(to bottom, black 88%, transparent 100%)",
-                  filter: "drop-shadow(0 14px 34px rgba(0, 0, 0, 0.06)) contrast(1.02)",
-                  transform: "scale(1.08)",
+                  // Pure Black and White High-Art Polish
+                  filter: "grayscale(100%) contrast(1.12) brightness(1.02)",
+                  WebkitMaskImage: "linear-gradient(to bottom, black 84%, transparent 100%)",
+                  maskImage: "linear-gradient(to bottom, black 84%, transparent 100%)",
+                  transform: "scale(1.12)",
                   transformOrigin: "bottom center",
+                  transition: "transform 0.4s cubic-bezier(0.16, 1, 0.3, 1)",
                 }}
               />
             </div>
@@ -433,10 +479,11 @@ export default function MindlyHero() {
             display: none !important;
           }
           .hero-stage {
-            min-height: 460px !important;
+            min-height: 500px !important;
+            margin-top: -20px !important;
           }
           .hero-centerpiece {
-            max-width: 600px !important;
+            max-width: 760px !important;
           }
         }
         @media (max-width: 680px) {
@@ -444,7 +491,8 @@ export default function MindlyHero() {
             font-size: 38px !important;
           }
           .hero-stage {
-            min-height: 360px !important;
+            min-height: 380px !important;
+            margin-top: -10px !important;
           }
           .hero-centerpiece {
             max-width: 100% !important;
