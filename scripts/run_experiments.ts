@@ -46,6 +46,23 @@ function main() {
   console.log("       REPEAT-RUN EXPERIMENTAL VARIANCE ANALYSIS    ");
   console.log("====================================================");
 
+  const reportArgIdx = process.argv.indexOf("--report");
+  if (reportArgIdx !== -1 && process.argv[reportArgIdx + 1]) {
+    const reportPath = process.argv[reportArgIdx + 1];
+    if (fs.existsSync(reportPath)) {
+      const report = JSON.parse(fs.readFileSync(reportPath, "utf-8"));
+      console.log(`Loaded RunReport: ${report.id ?? "anonymous"} from ${reportPath}\n`);
+      const bHeld = report.before?.heldout?.asr ?? 0;
+      const aHeld = report.after?.heldout?.asr ?? 0;
+      const drop = ((bHeld - aHeld) / (bHeld || 1)) * 100;
+      console.log(`Original Held-out ASR: ${(bHeld * 100).toFixed(1)}%`);
+      console.log(`Hardened Held-out ASR: ${(aHeld * 100).toFixed(1)}%`);
+      console.log(`Relative ASR Reduction: ${drop.toFixed(1)}% drop`);
+      console.log(`Over-Refusal Rate: ${((report.before?.overRefusalRate ?? 0) * 100).toFixed(1)}% -> ${((report.after?.overRefusalRate ?? 0) * 100).toFixed(1)}%`);
+      return;
+    }
+  }
+
   // Sample historical or imported repeat-runs data (3 runs per bot)
   const experimentData: BotRunResult[] = [
     {
