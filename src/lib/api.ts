@@ -1,4 +1,4 @@
-import { timingSafeEqual } from "node:crypto";
+import { createHash, timingSafeEqual } from "node:crypto";
 import { ConfigError } from "./config";
 import { LLMError } from "./llm";
 
@@ -17,9 +17,9 @@ function checkAccess(req: Request) {
   const code = process.env.APP_ACCESS_CODE?.trim();
   if (!code) return; // access code not configured: open (fine for local dev)
   const got = req.headers.get("x-access-code") ?? "";
-  const a = Buffer.from(got);
-  const b = Buffer.from(code);
-  if (a.length !== b.length || !timingSafeEqual(a, b)) {
+  const a = createHash("sha256").update(got).digest();
+  const b = createHash("sha256").update(code).digest();
+  if (!timingSafeEqual(a, b)) {
     throw new HttpError(401, "Invalid or missing access code.");
   }
 }
