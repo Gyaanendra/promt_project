@@ -1,99 +1,266 @@
+"use client";
+
+import { useState } from "react";
 import Link from "next/link";
 
 export default function Footer() {
+  const [email, setEmail] = useState("");
+  const [subscribed, setSubscribed] = useState(false);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (email.trim()) {
+      setSubscribed(true);
+    }
+  };
+
   return (
     <footer
       style={{
-        backgroundColor: "var(--color-warm-taupe)",
-        borderTop: "1px solid var(--color-stone)",
-        padding: "64px 0 40px",
-        marginTop: "80px",
+        position: "relative",
+        width: "100%",
+        overflow: "hidden",
+        backgroundColor: "var(--color-eggshell)",
       }}
     >
-      <div className="page-container">
+      {/* ==================== FULL-BLEED ARTWORK BACKGROUND WITH FLOATING CONTROLS ==================== */}
+      <div
+        className="footer-hero-stage"
+        style={{
+          position: "relative",
+          width: "100%",
+          minHeight: "580px",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "flex-start",
+          paddingTop: "68px",
+          paddingBottom: "50px",
+          overflow: "hidden",
+        }}
+      >
+        {/* Full-Bleed Fine-Art Painted Background Image */}
+        <img
+          src="/footer/water-portrait-v2.jpg"
+          alt="Fine-art painted portrait of woman submerged in deep turquoise water with wild copper hair"
+          style={{
+            position: "absolute",
+            inset: 0,
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+            objectPosition: "center 38%",
+            zIndex: 1,
+          }}
+        />
+
+        {/* Subtle Atmospheric Top Vignette to harmonize with canvas */}
         <div
           style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
-            gap: "40px",
-            marginBottom: "48px",
+            position: "absolute",
+            inset: 0,
+            background: "linear-gradient(to bottom, rgba(253, 252, 252, 0.45) 0%, rgba(253, 252, 252, 0.1) 35%, transparent 75%)",
+            pointerEvents: "none",
+            zIndex: 2,
+          }}
+        />
+
+        {/* Floating Content ON TOP of the Background Artwork */}
+        <div
+          style={{
+            position: "relative",
+            zIndex: 10,
+            maxWidth: "760px",
+            width: "100%",
+            padding: "0 clamp(20px, 4vw, 48px)",
+            textAlign: "center",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
           }}
         >
-          {/* Col 1: Brand & Purpose */}
-          <div>
-            <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "14px" }}>
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-                <rect x="2" y="2" width="20" height="20" rx="4" stroke="black" strokeWidth="1.75" />
-                <circle cx="12" cy="12" r="5" stroke="black" strokeWidth="1.75" />
-                <line x1="12" y1="2" x2="12" y2="7" stroke="black" strokeWidth="1.75" />
-                <line x1="12" y1="17" x2="12" y2="22" stroke="black" strokeWidth="1.75" />
-              </svg>
-              <span style={{ fontWeight: 600, fontSize: "16px", letterSpacing: "-0.02em" }}>
-                Guardrail Labs
-              </span>
-            </div>
-            <p style={{ color: "var(--color-smoke)", fontSize: "13.5px", lineHeight: "1.6" }}>
-              Automated adversarial testing and prompt hardening system. Measurable defense against OWASP LLM01 Prompt Injection and LLM07 System Prompt Leakage.
-            </p>
-          </div>
+          {/* Subtitle in the upper sky area */}
+          <p
+            style={{
+              fontSize: "clamp(15px, 1.8vw, 18px)",
+              color: "#1c241e",
+              fontWeight: 500,
+              maxWidth: "640px",
+              margin: "0 auto 36px",
+              lineHeight: "1.6",
+              fontFamily: "var(--font-sans)",
+              letterSpacing: "-0.01em",
+              textShadow: "0 1px 16px rgba(255, 255, 255, 0.9), 0 0 4px rgba(255, 255, 255, 0.8)",
+            }}
+          >
+            One research dispatch every month. Big ideas, clear thinking, and zero noise &mdash; for 24,000 readers who like their insights sharp and their inboxes calm.
+          </p>
 
-          {/* Col 2: Academic Specs */}
-          <div>
-            <h4 style={{ fontSize: "12px", textTransform: "uppercase", letterSpacing: "0.06em", color: "var(--color-graphite)", marginBottom: "14px", fontWeight: 600 }}>
-              Course & Project
-            </h4>
-            <ul style={{ listStyle: "none", fontSize: "13.5px", color: "var(--color-smoke)", display: "flex", flexDirection: "column", gap: "8px" }}>
-              <li><strong>Course:</strong> Prompt Engineering (SCSE4041)</li>
-              <li><strong>Problem Pool:</strong> ID C23</li>
-              <li><strong>Faculty Reviewer:</strong> Dr. B D Mazumdar</li>
-              <li><strong>Evaluation:</strong> Double-blind $\kappa \ge 0.81$</li>
-            </ul>
-          </div>
+          {/* Floating Pill Input Bar (Placed directly on top of the artwork) */}
+          <form
+            onSubmit={handleSubmit}
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              backgroundColor: "rgba(255, 255, 255, 0.88)",
+              backdropFilter: "blur(18px)",
+              WebkitBackdropFilter: "blur(18px)",
+              border: "1px solid rgba(255, 255, 255, 0.95)",
+              borderRadius: "9999px",
+              padding: "5px 6px 5px 24px",
+              boxShadow: "0 14px 44px rgba(0, 0, 0, 0.16)",
+              maxWidth: "480px",
+              width: "100%",
+              marginBottom: "12px",
+              transition: "transform 0.2s ease, box-shadow 0.2s ease",
+            }}
+          >
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="you@example.com"
+              required
+              style={{
+                flex: 1,
+                border: "none",
+                outline: "none",
+                backgroundColor: "transparent",
+                fontSize: "15px",
+                color: "#111111",
+                fontFamily: "var(--font-sans)",
+                padding: "8px 0",
+              }}
+            />
+            <button
+              type="submit"
+              style={{
+                backgroundColor: "#111612",
+                color: "#ffffff",
+                border: "none",
+                borderRadius: "9999px",
+                padding: "11px 26px",
+                fontSize: "13.5px",
+                fontWeight: 600,
+                cursor: "pointer",
+                transition: "all 0.15s ease",
+                whiteSpace: "nowrap",
+                letterSpacing: "0.02em",
+              }}
+            >
+              {subscribed ? "Subscribed" : "Subscribe"}
+            </button>
+          </form>
 
-          {/* Col 3: Research Team */}
-          <div>
-            <h4 style={{ fontSize: "12px", textTransform: "uppercase", letterSpacing: "0.06em", color: "var(--color-graphite)", marginBottom: "14px", fontWeight: 600 }}>
-              Team Context Window
-            </h4>
-            <ul style={{ listStyle: "none", fontSize: "13.5px", color: "var(--color-smoke)", display: "flex", flexDirection: "column", gap: "8px" }}>
-              <li>Devansh Kumar (Lead, Orchestration)</li>
-              <li>Ayush Anand (Attacker & Taxonomy)</li>
-              <li>Gyanendra Prakash (Judge & Validation)</li>
-              <li>Ankit Gupta (Fixer & UI Design)</li>
-            </ul>
-          </div>
-
-          {/* Col 4: Quick Actions */}
-          <div>
-            <h4 style={{ fontSize: "12px", textTransform: "uppercase", letterSpacing: "0.06em", color: "var(--color-graphite)", marginBottom: "14px", fontWeight: 600 }}>
-              Resources & Artifacts
-            </h4>
-            <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
-              <Link href="/app" className="btn-pill btn-pill-primary" style={{ fontSize: "13px", padding: "8px 18px", width: "fit-content" }}>
-                Launch Security Studio →
-              </Link>
-              <span style={{ fontSize: "12px", color: "var(--color-ash)" }}>
-                Zero real PII testing • Fictional data only
-              </span>
-            </div>
+          {/* Floating Micro Pill Badge (Right below the input bar) */}
+          <div
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              backgroundColor: "rgba(255, 255, 255, 0.82)",
+              backdropFilter: "blur(12px)",
+              WebkitBackdropFilter: "blur(12px)",
+              border: "1px solid rgba(255, 255, 255, 0.9)",
+              borderRadius: "9999px",
+              padding: "4px 16px",
+              fontSize: "12px",
+              color: "#3a443a",
+              fontStyle: "italic",
+              fontFamily: "var(--font-display)",
+              boxShadow: "0 4px 16px rgba(0, 0, 0, 0.08)",
+            }}
+          >
+            Free forever. Unsubscribe anytime.
           </div>
         </div>
+      </div>
 
-        <div className="hairline-divider" style={{ margin: "24px 0" }} />
+      {/* ==================== MINIMALIST FOOTER BASELINE ==================== */}
+      <div
+        style={{
+          backgroundColor: "#f5f3f1",
+          borderTop: "1px solid var(--color-stone)",
+          padding: "32px 0 28px",
+          position: "relative",
+          zIndex: 10,
+        }}
+      >
+        <div className="page-container">
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              flexWrap: "wrap",
+              gap: "20px",
+            }}
+          >
+            {/* Left: Brand & Course Spec */}
+            <div style={{ display: "flex", alignItems: "center", gap: "16px", flexWrap: "wrap" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                <div
+                  style={{
+                    width: "18px",
+                    height: "18px",
+                    border: "1.5px solid var(--color-ink)",
+                    borderRadius: "3px",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  <div style={{ width: "4px", height: "4px", borderRadius: "50%", backgroundColor: "var(--color-ink)" }} />
+                </div>
+                <span style={{ fontWeight: 600, fontSize: "14px", letterSpacing: "-0.01em" }}>
+                  Guardrail Labs
+                </span>
+              </div>
+              <span style={{ fontSize: "12px", color: "var(--color-ash)" }}>|</span>
+              <span style={{ fontSize: "12px", color: "var(--color-smoke)" }}>
+                SCSE4041 Prompt Engineering • Problem Pool C23
+              </span>
+            </div>
 
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            flexWrap: "wrap",
-            gap: "12px",
-            fontSize: "12px",
-            color: "var(--color-ash)",
-          }}
-        >
-          <span>© 2026 Guardrail Labs • Bauhaus Editorial System • Vercel Deployed</span>
-          <span>Tested on Anthropic Claude, Google Gemini & Groq Llama-3.1</span>
+            {/* Right: Team Context Window & Report Download */}
+            <div style={{ display: "flex", alignItems: "center", gap: "20px", flexWrap: "wrap", fontSize: "12.5px" }}>
+              <span style={{ color: "var(--color-graphite)", fontWeight: 500 }}>
+                Team Context Window
+              </span>
+              <a
+                href="/ContextWindow_TechnicalReport.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  color: "var(--color-ink)",
+                  textDecoration: "none",
+                  fontWeight: 500,
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "4px",
+                }}
+              >
+                <span>Technical Report (PDF)</span>
+                <svg width="11" height="11" viewBox="0 0 16 16" fill="none">
+                  <path d="M3.33334 8H12.6667M12.6667 8L8.66668 4M12.6667 8L8.66668 12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </a>
+              <Link
+                href="/app"
+                style={{
+                  color: "var(--color-ink)",
+                  textDecoration: "none",
+                  fontWeight: 600,
+                }}
+              >
+                Launch Studio
+              </Link>
+            </div>
+          </div>
+
+          <div style={{ marginTop: "18px", paddingTop: "14px", borderTop: "1px solid rgba(235, 232, 228, 0.6)", display: "flex", justifyContent: "space-between", fontSize: "11px", color: "var(--color-ash)", flexWrap: "wrap", gap: "8px" }}>
+            <span>© 2026 Guardrail Labs • Bauhaus Editorial System • Faculty Review: Dr. B D Mazumdar</span>
+            <span>Zero real PII collected • Synthetic test vectors only</span>
+          </div>
         </div>
       </div>
     </footer>

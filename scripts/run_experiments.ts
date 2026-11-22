@@ -109,7 +109,7 @@ function main() {
     );
   }
 
-  console.log("\n✅ All target criteria satisfied: Relative reduction >= 50% & Over-refusal increase <= 10%");
+  console.log("\n[PASS] All target criteria satisfied: Relative reduction >= 50% & Over-refusal increase <= 10%");
 }
 
 main();

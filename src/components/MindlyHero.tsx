@@ -266,30 +266,25 @@ export default function MindlyHero() {
             </div>
             <div style={{ display: "flex", alignItems: "center" }}>
               {[
-                { name: "DK", bg: "#f0ece7", color: "#2d2a26" },
-                { name: "AA", bg: "#e6e9ed", color: "#1f2937" },
-                { name: "GP", bg: "#ebede4", color: "#2d3326" },
-                { name: "AG", bg: "#ede6ed", color: "#371f37" },
+                { src: "/avatars/avatar-1.jpg", alt: "AI Engineer 1" },
+                { src: "/avatars/avatar-2.jpg", alt: "AI Engineer 2" },
+                { src: "/avatars/avatar-3.jpg", alt: "AI Engineer 3" },
+                { src: "/avatars/avatar-4.jpg", alt: "AI Engineer 4" },
               ].map((av, i) => (
-                <div
+                <img
                   key={i}
+                  src={av.src}
+                  alt={av.alt}
                   style={{
                     width: "28px",
                     height: "28px",
                     borderRadius: "50%",
-                    backgroundColor: av.bg,
-                    color: av.color,
+                    objectFit: "cover",
                     border: "2px solid var(--color-eggshell)",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    fontSize: "10.5px",
-                    fontWeight: 600,
                     marginLeft: i === 0 ? "0" : "-8px",
+                    filter: "grayscale(100%) contrast(1.08)",
                   }}
-                >
-                  {av.name}
-                </div>
+                />
               ))}
               <div
                 style={{
@@ -332,28 +327,24 @@ export default function MindlyHero() {
           >
             <div style={{ display: "flex", alignItems: "center", marginBottom: "14px" }}>
               {[
-                { name: "BD", bg: "#e8ece8" },
-                { name: "ML", bg: "#eee8e4" },
-                { name: "CX", bg: "#e6eaf0" },
+                { src: "/avatars/avatar-5.jpg", alt: "Reviewer 1" },
+                { src: "/avatars/avatar-6.jpg", alt: "Reviewer 2" },
+                { src: "/avatars/avatar-1.jpg", alt: "Reviewer 3" },
               ].map((u, i) => (
-                <div
+                <img
                   key={i}
+                  src={u.src}
+                  alt={u.alt}
                   style={{
                     width: "26px",
                     height: "26px",
                     borderRadius: "50%",
-                    backgroundColor: u.bg,
+                    objectFit: "cover",
                     border: "1.5px solid var(--color-eggshell)",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    fontSize: "9.5px",
-                    fontWeight: 600,
                     marginLeft: i === 0 ? 0 : "-6px",
+                    filter: "grayscale(100%) contrast(1.08)",
                   }}
-                >
-                  {u.name}
-                </div>
+                />
               ))}
               <div
                 style={{
@@ -488,13 +479,23 @@ export default function MindlyHero() {
         }
         @media (max-width: 680px) {
           .hero-headline {
-            font-size: 38px !important;
+            font-size: 36px !important;
+            margin-bottom: 14px !important;
+          }
+          .hero-header-content p {
+            font-size: 15px !important;
+            margin-bottom: 22px !important;
+          }
+          .hero-cta-group {
+            gap: 10px !important;
           }
           .hero-stage {
-            min-height: 380px !important;
-            margin-top: -10px !important;
+            min-height: auto !important;
+            margin-top: -38px !important;
           }
           .hero-centerpiece {
+            min-height: auto !important;
+            justify-content: flex-start !important;
             max-width: 100% !important;
           }
         }

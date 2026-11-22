@@ -1,3 +1,6 @@
+"use client";
+
+import { useState } from "react";
 import Link from "next/link";
 
 interface NavbarProps {
@@ -5,6 +8,8 @@ interface NavbarProps {
 }
 
 export default function Navbar({ current = "landing" }: NavbarProps) {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
   return (
     <header
       style={{
@@ -12,106 +17,356 @@ export default function Navbar({ current = "landing" }: NavbarProps) {
         top: 0,
         zIndex: 50,
         backgroundColor: "rgba(253, 252, 252, 0.92)",
-        backdropFilter: "blur(12px)",
-        WebkitBackdropFilter: "blur(12px)",
-        borderBottom: "1px solid var(--color-stone)",
-        height: "64px",
+        backdropFilter: "blur(16px)",
+        WebkitBackdropFilter: "blur(16px)",
+        borderBottom: "none", // Explicitly borderless per design
+        height: "54px",
         display: "flex",
         alignItems: "center",
+        transition: "all 0.2s ease",
       }}
     >
       <div
         style={{
           width: "100%",
-          maxWidth: "1640px",
+          maxWidth: "1520px",
           margin: "0 auto",
-          padding: "0 clamp(20px, 3.5vw, 64px)",
+          padding: "0 clamp(16px, 3vw, 48px)",
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
         }}
       >
-        {/* Brand Logo & Wordmark */}
+        {/* Minimalist Brand Logo & Wordmark */}
         <Link
           href="/"
           style={{
             display: "flex",
             alignItems: "center",
-            gap: "10px",
+            gap: "8px",
             textDecoration: "none",
             color: "var(--color-ink)",
+            zIndex: 60,
           }}
+          onClick={() => setMobileMenuOpen(false)}
         >
-          {/* Bauhaus Geometric Symbol */}
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-            <rect x="2" y="2" width="20" height="20" rx="4" stroke="black" strokeWidth="1.75" />
-            <circle cx="12" cy="12" r="5" stroke="black" strokeWidth="1.75" />
-            <line x1="12" y1="2" x2="12" y2="7" stroke="black" strokeWidth="1.75" />
-            <line x1="12" y1="17" x2="12" y2="22" stroke="black" strokeWidth="1.75" />
-            <circle cx="12" cy="12" r="1.5" fill="var(--color-ember-orange)" />
-          </svg>
-          <span style={{ fontWeight: 600, fontSize: "16px", letterSpacing: "-0.02em" }}>
+          {/* Bauhaus Architectural Glyph */}
+          <div
+            style={{
+              width: "20px",
+              height: "20px",
+              border: "1.5px solid var(--color-ink)",
+              borderRadius: "4px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <div
+              style={{
+                width: "5px",
+                height: "5px",
+                borderRadius: "50%",
+                backgroundColor: "var(--color-ink)",
+              }}
+            />
+          </div>
+          <span style={{ fontWeight: 600, fontSize: "14.5px", letterSpacing: "-0.015em" }}>
             Guardrail Labs
-          </span>
-          <span className="tag-pill" style={{ fontSize: "10px", padding: "2px 8px" }}>
-            v2.0
           </span>
         </Link>
 
-        {/* Center Nav Pills (on Landing page) */}
+        {/* Desktop Inline Navigation */}
         {current === "landing" ? (
           <nav
+            className="nav-desktop-links"
             style={{
               display: "flex",
               alignItems: "center",
-              gap: "6px",
-              backgroundColor: "var(--color-warm-taupe)",
-              padding: "4px 8px",
-              borderRadius: "var(--radius-full)",
-              border: "1px solid var(--color-stone)",
+              gap: "28px",
             }}
-            className="desktop-only"
           >
-            <a href="#threats" className="btn-pill btn-pill-ghost" style={{ fontSize: "13px", padding: "5px 12px" }}>
-              Threat Taxonomy
+            <a
+              href="#threats"
+              style={{
+                fontSize: "13px",
+                color: "var(--color-graphite)",
+                textDecoration: "none",
+                fontWeight: 450,
+                transition: "color 0.15s ease",
+              }}
+              onMouseEnter={(e) => (e.currentTarget.style.color = "var(--color-ink)")}
+              onMouseLeave={(e) => (e.currentTarget.style.color = "var(--color-graphite)")}
+            >
+              Taxonomy
             </a>
-            <a href="#architecture" className="btn-pill btn-pill-ghost" style={{ fontSize: "13px", padding: "5px 12px" }}>
-              Architecture
+            <a
+              href="#studio-overview"
+              style={{
+                fontSize: "13px",
+                color: "var(--color-graphite)",
+                textDecoration: "none",
+                fontWeight: 450,
+                transition: "color 0.15s ease",
+              }}
+              onMouseEnter={(e) => (e.currentTarget.style.color = "var(--color-ink)")}
+              onMouseLeave={(e) => (e.currentTarget.style.color = "var(--color-graphite)")}
+            >
+              Studio
             </a>
-            <a href="#interactive-demo" className="btn-pill btn-pill-ghost" style={{ fontSize: "13px", padding: "5px 12px" }}>
-              Live Demo
+            <a
+              href="#interactive-demo"
+              style={{
+                fontSize: "13px",
+                color: "var(--color-graphite)",
+                textDecoration: "none",
+                fontWeight: 450,
+                transition: "color 0.15s ease",
+              }}
+              onMouseEnter={(e) => (e.currentTarget.style.color = "var(--color-ink)")}
+              onMouseLeave={(e) => (e.currentTarget.style.color = "var(--color-graphite)")}
+            >
+              Live Audit
             </a>
-            <a href="#benchmarks" className="btn-pill btn-pill-ghost" style={{ fontSize: "13px", padding: "5px 12px" }}>
+            <a
+              href="#benchmarks"
+              style={{
+                fontSize: "13px",
+                color: "var(--color-graphite)",
+                textDecoration: "none",
+                fontWeight: 450,
+                transition: "color 0.15s ease",
+              }}
+              onMouseEnter={(e) => (e.currentTarget.style.color = "var(--color-ink)")}
+              onMouseLeave={(e) => (e.currentTarget.style.color = "var(--color-graphite)")}
+            >
               Benchmarks
+            </a>
+            <a
+              href="/ContextWindow_TechnicalReport.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                fontSize: "13px",
+                color: "var(--color-graphite)",
+                textDecoration: "none",
+                fontWeight: 450,
+                transition: "color 0.15s ease",
+              }}
+              onMouseEnter={(e) => (e.currentTarget.style.color = "var(--color-ink)")}
+              onMouseLeave={(e) => (e.currentTarget.style.color = "var(--color-graphite)")}
+            >
+              Report (PDF)
             </a>
           </nav>
         ) : (
-          <nav style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-            <span style={{ fontSize: "13px", color: "var(--color-smoke)" }}>
-              Automated Red-Teaming Studio
+          <nav className="nav-desktop-links" style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+            <span style={{ fontSize: "12.5px", color: "var(--color-smoke)", fontFamily: "var(--font-mono)" }}>
+              Interactive Security Studio
             </span>
           </nav>
         )}
 
-        {/* Action Button */}
-        <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+        {/* Right CTA and Mobile Hamburger Button */}
+        <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
           {current === "landing" ? (
-            <Link href="/app" className="btn-pill btn-pill-primary">
-              <span>Launch Studio</span>
-              <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-                <path d="M3.33334 8H12.6667M12.6667 8L8.66668 4M12.6667 8L8.66668 12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+            <Link
+              href="/app"
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "6px",
+                backgroundColor: "var(--color-ink)",
+                color: "var(--color-eggshell)",
+                padding: "6px 14px",
+                borderRadius: "9999px",
+                fontSize: "12.5px",
+                fontWeight: 500,
+                textDecoration: "none",
+                transition: "all 0.15s ease",
+                whiteSpace: "nowrap",
+              }}
+            >
+              <span className="cta-full-label">Launch Studio</span>
+              <span className="cta-short-label">Studio</span>
+              <svg width="11" height="11" viewBox="0 0 16 16" fill="none">
+                <path
+                  d="M3.33334 8H12.6667M12.6667 8L8.66668 4M12.6667 8L8.66668 12"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
               </svg>
             </Link>
           ) : (
-            <Link href="/" className="btn-pill btn-pill-secondary">
-              <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-                <path d="M12.6667 8H3.33334M3.33334 8L7.33334 12M3.33334 8L7.33334 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-              <span>Back to Overview</span>
+            <Link
+              href="/"
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "6px",
+                backgroundColor: "transparent",
+                color: "var(--color-ink)",
+                padding: "5px 14px",
+                borderRadius: "9999px",
+                border: "1px solid var(--color-stone)",
+                fontSize: "12.5px",
+                fontWeight: 500,
+                textDecoration: "none",
+                transition: "all 0.15s ease",
+              }}
+            >
+              <span>Back</span>
             </Link>
+          )}
+
+          {/* Mobile Hamburger Toggle Button */}
+          {current === "landing" && (
+            <button
+              type="button"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="nav-mobile-toggle"
+              aria-label="Toggle navigation menu"
+              style={{
+                display: "none",
+                width: "34px",
+                height: "34px",
+                borderRadius: "8px",
+                border: "1px solid var(--color-stone)",
+                backgroundColor: "rgba(255, 255, 255, 0.8)",
+                alignItems: "center",
+                justifyContent: "center",
+                cursor: "pointer",
+                padding: "6px",
+              }}
+            >
+              <div style={{ display: "flex", flexDirection: "column", gap: "4px", width: "16px" }}>
+                <span
+                  style={{
+                    height: "1.75px",
+                    width: "100%",
+                    backgroundColor: "var(--color-ink)",
+                    transition: "transform 0.2s ease",
+                    transform: mobileMenuOpen ? "translateY(5.75px) rotate(45deg)" : "none",
+                  }}
+                />
+                <span
+                  style={{
+                    height: "1.75px",
+                    width: "100%",
+                    backgroundColor: "var(--color-ink)",
+                    transition: "opacity 0.2s ease",
+                    opacity: mobileMenuOpen ? 0 : 1,
+                  }}
+                />
+                <span
+                  style={{
+                    height: "1.75px",
+                    width: "100%",
+                    backgroundColor: "var(--color-ink)",
+                    transition: "transform 0.2s ease",
+                    transform: mobileMenuOpen ? "translateY(-5.75px) rotate(-45deg)" : "none",
+                  }}
+                />
+              </div>
+            </button>
           )}
         </div>
       </div>
+
+      {/* ==================== MOBILE SLIDE-DOWN DRAWER ==================== */}
+      {mobileMenuOpen && (
+        <div
+          className="mobile-nav-drawer"
+          style={{
+            position: "absolute",
+            top: "54px",
+            left: 0,
+            right: 0,
+            backgroundColor: "rgba(253, 252, 252, 0.98)",
+            backdropFilter: "blur(20px)",
+            WebkitBackdropFilter: "blur(20px)",
+            borderBottom: "1px solid var(--color-stone)",
+            padding: "20px 24px 28px",
+            boxShadow: "0 16px 36px rgba(0,0,0,0.08)",
+            display: "flex",
+            flexDirection: "column",
+            gap: "18px",
+            zIndex: 49,
+          }}
+        >
+          <a
+            href="#threats"
+            onClick={() => setMobileMenuOpen(false)}
+            style={{ fontSize: "15px", fontWeight: 500, color: "var(--color-ink)", textDecoration: "none" }}
+          >
+            Threat Taxonomy
+          </a>
+          <a
+            href="#studio-overview"
+            onClick={() => setMobileMenuOpen(false)}
+            style={{ fontSize: "15px", fontWeight: 500, color: "var(--color-ink)", textDecoration: "none" }}
+          >
+            Adversarial Studio
+          </a>
+          <a
+            href="#interactive-demo"
+            onClick={() => setMobileMenuOpen(false)}
+            style={{ fontSize: "15px", fontWeight: 500, color: "var(--color-ink)", textDecoration: "none" }}
+          >
+            Live Comparison Audit
+          </a>
+          <a
+            href="#benchmarks"
+            onClick={() => setMobileMenuOpen(false)}
+            style={{ fontSize: "15px", fontWeight: 500, color: "var(--color-ink)", textDecoration: "none" }}
+          >
+            Academic Benchmarks
+          </a>
+          <a
+            href="/ContextWindow_TechnicalReport.pdf"
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => setMobileMenuOpen(false)}
+            style={{ fontSize: "15px", fontWeight: 500, color: "var(--color-ink)", textDecoration: "none" }}
+          >
+            Technical Report (PDF)
+          </a>
+          <div style={{ paddingTop: "8px", borderTop: "1px solid var(--color-stone)" }}>
+            <Link
+              href="/app"
+              onClick={() => setMobileMenuOpen(false)}
+              className="btn-pill btn-pill-primary"
+              style={{ width: "100%", justifyContent: "center" }}
+            >
+              <span>Launch Studio</span>
+              <span>→</span>
+            </Link>
+          </div>
+        </div>
+      )}
+
+      {/* Responsive CSS for Navbar */}
+      <style jsx>{`
+        .cta-short-label {
+          display: none;
+        }
+        @media (max-width: 860px) {
+          .nav-desktop-links {
+            display: none !important;
+          }
+          .nav-mobile-toggle {
+            display: inline-flex !important;
+          }
+          .cta-full-label {
+            display: none;
+          }
+          .cta-short-label {
+            display: inline;
+          }
+        }
+      `}</style>
     </header>
   );
 }
