@@ -1,9 +1,13 @@
 /**
- * LLMs often wrap JSON in prose or code fences. Pull out the first balanced
- * JSON object or array and parse it.
+ * LLMs often wrap JSON in prose, code fences, or reasoning blocks (<think>...</think>).
+ * Pull out the first balanced JSON object or array, repair minor syntax quirks (e.g. trailing commas),
+ * and parse it safely.
  */
 export function extractJson<T = unknown>(text: string): T {
-  const stripped = text.replace(/```(?:json)?/gi, "").trim();
+  const stripped = text
+    .replace(/<think>[\s\S]*?<\/think>/gi, "")
+    .replace(/```(?:json)?/gi, "")
+    .trim();
 
   const starts = [stripped.indexOf("{"), stripped.indexOf("[")].filter((i) => i >= 0);
   if (starts.length === 0) throw new Error("No JSON found in model output");
@@ -26,7 +30,12 @@ export function extractJson<T = unknown>(text: string): T {
     else if (ch === open) depth++;
     else if (ch === close) {
       depth--;
-      if (depth === 0) return JSON.parse(stripped.slice(start, i + 1)) as T;
+      if (depth === 0) {
+        let candidate = stripped.slice(start, i + 1);
+        // Repair trailing commas before closing brackets/braces that LLMs occasionally output
+        candidate = candidate.replace(/,\s*([}\]])/g, "$1");
+        return JSON.parse(candidate) as T;
+      }
     }
   }
   throw new Error("Unbalanced JSON in model output");

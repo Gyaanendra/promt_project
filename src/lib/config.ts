@@ -55,6 +55,15 @@ function build(prefix: "STRONG" | "TARGET", fallbackProvider: Provider): ModelCo
         `Missing ${prefix}_BASE_URL (for example https://api.groq.com/openai/v1).`,
       );
     }
+    try {
+      const parsed = new URL(baseUrl);
+      if (parsed.protocol !== "http:" && parsed.protocol !== "https:") {
+        throw new ConfigError(`Invalid protocol in ${prefix}_BASE_URL ("${parsed.protocol}"). Must be http: or https:.`);
+      }
+    } catch (e) {
+      if (e instanceof ConfigError) throw e;
+      throw new ConfigError(`Invalid URL in ${prefix}_BASE_URL: "${baseUrl}".`);
+    }
     baseUrl = baseUrl.replace(/\/+$/, "");
   }
 
