@@ -42,6 +42,27 @@ interface BenignItem {
 }
 
 const CONCURRENCY = 4;
+const CHECKPOINT_KEY = "guardrail-labs:checkpoint";
+
+export function saveCheckpoint(partial: Record<string, unknown>) {
+  try {
+    if (typeof window !== "undefined" && window.localStorage) {
+      window.localStorage.setItem(CHECKPOINT_KEY, JSON.stringify({ ...partial, timestamp: Date.now() }));
+    }
+  } catch {
+    /* storage unavailable */
+  }
+}
+
+export function clearCheckpoint() {
+  try {
+    if (typeof window !== "undefined" && window.localStorage) {
+      window.localStorage.removeItem(CHECKPOINT_KEY);
+    }
+  } catch {
+    /* ignore */
+  }
+}
 
 async function call<T>(
   path: string,
@@ -77,12 +98,25 @@ async function call<T>(
   throw lastError;
 }
 
-async function pool<T, R>(items: T[], limit: number, fn: (item: T, index: number) => Promise<R>): Promise<R[]> {
+async function pool<T, R>(
+  items: T[],
+  limit: number,
+  fn: (item: T, index: number) => Promise<R>,
+  minIntervalMs = 100,
+): Promise<R[]> {
   const results = new Array<R>(items.length);
   let next = 0;
+  let lastStart = 0;
   const worker = async () => {
     while (next < items.length) {
       const i = next++;
+      // Smooth out rapid request spikes to protect provider rate limits
+      const now = Date.now();
+      const elapsed = now - lastStart;
+      if (elapsed < minIntervalMs) {
+        await new Promise((r) => setTimeout(r, minIntervalMs - elapsed));
+      }
+      lastStart = Date.now();
       results[i] = await fn(items[i], i);
     }
   };
@@ -246,6 +280,7 @@ export async function runPipeline(input: PipelineInput): Promise<RunReport> {
       : await evaluate(hardenedPrompt, "evaluating-hardened", "Re-testing the hardened prompt");
 
   onProgress({ stage: "done", message: "Done", done: 1, total: 1 });
+  clearCheckpoint();
 
   return {
     id: `run-${Date.now()}`,
