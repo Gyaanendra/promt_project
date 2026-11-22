@@ -23,7 +23,7 @@ export class LLMError extends Error {
   }
 }
 
-const REQUEST_TIMEOUT_MS = 50_000;
+const REQUEST_TIMEOUT_MS = 25_000;
 const RETRY_STATUS = new Set([429, 500, 502, 503, 504, 529]);
 
 async function post(url: string, headers: Record<string, string>, body: unknown): Promise<unknown> {
@@ -39,16 +39,24 @@ async function post(url: string, headers: Record<string, string>, body: unknown)
       if (res.ok) return await res.json();
 
       const text = (await res.text()).slice(0, 300);
-      lastError = new LLMError(`Model API returned ${res.status}: ${text}`, 502);
+      lastError = new LLMError(`Model API returned ${res.status}: ${text}`, res.status >= 500 ? 502 : res.status);
       if (!RETRY_STATUS.has(res.status)) throw lastError;
+
+      const retryAfter = res.headers.get("retry-after");
+      const retryMs = retryAfter && !isNaN(Number(retryAfter))
+        ? Math.min(Number(retryAfter) * 1000, 10_000)
+        : 600 * 2 ** attempt + Math.floor(Math.random() * 200);
+      await new Promise((r) => setTimeout(r, retryMs));
     } catch (e) {
-      if (e instanceof LLMError && !RETRY_STATUS.has(Number(/returned (\d+)/.exec(e.message)?.[1]))) throw e;
+      if (e instanceof LLMError && !RETRY_STATUS.has(e.status)) throw e;
       if (!(e instanceof LLMError)) {
         const msg = e instanceof Error ? e.message : String(e);
         lastError = new LLMError(`Model API request failed: ${msg}`, 504);
       }
+      if (attempt < 2) {
+        await new Promise((r) => setTimeout(r, 600 * 2 ** attempt + Math.floor(Math.random() * 200)));
+      }
     }
-    await new Promise((r) => setTimeout(r, 600 * 2 ** attempt));
   }
   throw lastError ?? new LLMError("Model API request failed");
 }
@@ -99,6 +107,7 @@ async function callOpenAICompatible(c: ModelConfig, o: GenerateOptions): Promise
       model: c.model,
       max_tokens: o.maxTokens ?? 1500,
       ...(o.temperature !== undefined ? { temperature: o.temperature } : {}),
+      ...(o.json ? { response_format: { type: "json_object" } } : {}),
       messages: [...(o.system ? [{ role: "system", content: o.system }] : []), ...o.messages],
     },
   )) as { choices?: { message?: { content?: string | null } }[] };
