@@ -1,13 +1,12 @@
 import { timingSafeEqual } from "node:crypto";
-import { ConfigError } from "./config";
-import { LLMError } from "./llm";
+import { ConfigError } from "./config.ts";
+import { LLMError } from "./llm.ts";
 
 export class HttpError extends Error {
-  constructor(
-    public status: number,
-    message: string,
-  ) {
+  status: number;
+  constructor(status: number, message: string) {
     super(message);
+    this.status = status;
   }
 }
 
