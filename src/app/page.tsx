@@ -78,58 +78,358 @@ export default function LandingPage() {
         transformOrigin: "80px 65px",
       });
 
-      // 4. ScrollTrigger Section Entrances
-      // Studio Section Cards
-      gsap.from(".studio-card", {
-        scrollTrigger: {
-          trigger: "#studio-overview",
-          start: "top 80%",
-        },
-        y: 35,
-        autoAlpha: 0,
-        stagger: 0.15,
-        duration: 0.85,
-        ease: "power2.out",
+      // ==========================================
+      // SCROLL-BASED REVEALS & STAGGER SEQUENCES
+      // ==========================================
+
+      // A. Section Headers Reveal
+      gsap.utils.toArray<HTMLElement>(".section-reveal-header").forEach((header) => {
+        gsap.fromTo(
+          header,
+          { autoAlpha: 0, y: 32 },
+          {
+            autoAlpha: 1,
+            y: 0,
+            duration: 0.8,
+            ease: "power3.out",
+            clearProps: "transform,opacity,visibility",
+            scrollTrigger: {
+              trigger: header,
+              start: "top 88%",
+              once: true,
+            },
+          }
+        );
       });
 
-      // Defensive Agents Cards
-      gsap.from(".defensive-card", {
-        scrollTrigger: {
-          trigger: "#defensive-agents",
-          start: "top 80%",
-        },
-        y: 35,
-        autoAlpha: 0,
-        stagger: 0.15,
-        duration: 0.85,
-        ease: "power2.out",
-      });
+      // B. Hero Trust Logo Strip Reveal
+      gsap.fromTo(
+        ".hero-trust-strip",
+        { autoAlpha: 0, y: 20 },
+        {
+          autoAlpha: 1,
+          y: 0,
+          duration: 0.7,
+          ease: "power2.out",
+          clearProps: "transform,opacity,visibility",
+          scrollTrigger: {
+            trigger: ".hero-trust-strip",
+            start: "top 92%",
+            once: true,
+          },
+        }
+      );
 
-      // Research Bento Cards
-      gsap.from([".bento-col-1", ".bento-col-2", ".bento-col-3"], {
-        scrollTrigger: {
-          trigger: "#research-bento",
-          start: "top 80%",
-        },
-        y: 40,
-        autoAlpha: 0,
-        stagger: 0.15,
-        duration: 0.9,
-        ease: "power2.out",
-      });
+      // C. Studio Section Cards & 4 Feature Sub-cards
+      gsap.fromTo(
+        ".studio-card",
+        { autoAlpha: 0, y: 32 },
+        {
+          autoAlpha: 1,
+          y: 0,
+          stagger: 0.14,
+          duration: 0.8,
+          ease: "power2.out",
+          clearProps: "transform,opacity,visibility",
+          scrollTrigger: {
+            trigger: "#studio-overview",
+            start: "top 85%",
+            once: true,
+          },
+        }
+      );
 
-      // Safety Wireframe Cards
-      gsap.from(".safety-wireframe-card", {
-        scrollTrigger: {
-          trigger: "#safety",
-          start: "top 80%",
-        },
-        y: 30,
-        autoAlpha: 0,
-        stagger: 0.12,
-        duration: 0.8,
-        ease: "power2.out",
-      });
+      gsap.fromTo(
+        ".studio-feature-card",
+        { autoAlpha: 0, y: 24 },
+        {
+          autoAlpha: 1,
+          y: 0,
+          stagger: 0.08,
+          duration: 0.7,
+          ease: "power2.out",
+          clearProps: "transform,opacity,visibility",
+          scrollTrigger: {
+            trigger: ".studio-feature-grid",
+            start: "top 88%",
+            once: true,
+          },
+        }
+      );
+
+      // D. Defensive Agents Cards & Omnichannel Bubbles
+      gsap.fromTo(
+        ".defensive-card",
+        { autoAlpha: 0, y: 32 },
+        {
+          autoAlpha: 1,
+          y: 0,
+          stagger: 0.14,
+          duration: 0.8,
+          ease: "power2.out",
+          clearProps: "transform,opacity,visibility",
+          scrollTrigger: {
+            trigger: "#defensive-agents",
+            start: "top 85%",
+            once: true,
+          },
+        }
+      );
+
+      // Conversational Bubbles Stagger Sequence on Scroll
+      gsap.fromTo(
+        [".chat-bubble-float-1", ".chat-bubble-float-2", ".chat-bubble-float-3"],
+        { autoAlpha: 0, y: 20 },
+        {
+          autoAlpha: 1,
+          y: 0,
+          stagger: 0.14,
+          duration: 0.7,
+          ease: "back.out(1.4)",
+          clearProps: "transform,opacity,visibility",
+          scrollTrigger: {
+            trigger: "#defensive-agents",
+            start: "top 80%",
+            once: true,
+          },
+        }
+      );
+
+      // SVG Analytics Lines Draw & Data Dots Reveal
+      gsap.fromTo(
+        ".analytics-chart-path-v1",
+        { strokeDasharray: 450, strokeDashoffset: 450 },
+        {
+          strokeDashoffset: 0,
+          duration: 1.6,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: "#defensive-agents",
+            start: "top 70%",
+            once: true,
+          },
+        }
+      );
+
+      gsap.fromTo(
+        ".analytics-chart-path-v2",
+        { strokeDasharray: 450, strokeDashoffset: 450 },
+        {
+          strokeDashoffset: 0,
+          duration: 1.8,
+          delay: 0.25,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: "#defensive-agents",
+            start: "top 70%",
+            once: true,
+          },
+        }
+      );
+
+      gsap.fromTo(
+        ".analytics-dot",
+        { autoAlpha: 0, scale: 0 },
+        {
+          autoAlpha: 1,
+          scale: 1,
+          stagger: 0.1,
+          duration: 0.5,
+          ease: "back.out(2)",
+          delay: 0.8,
+          clearProps: "transform,opacity,visibility",
+          scrollTrigger: {
+            trigger: "#defensive-agents",
+            start: "top 75%",
+            once: true,
+          },
+        }
+      );
+
+      gsap.fromTo(
+        ".defensive-feature-card",
+        { autoAlpha: 0, y: 26 },
+        {
+          autoAlpha: 1,
+          y: 0,
+          stagger: 0.1,
+          duration: 0.7,
+          ease: "power2.out",
+          clearProps: "transform,opacity,visibility",
+          scrollTrigger: {
+            trigger: ".defensive-feature-grid",
+            start: "top 88%",
+            once: true,
+          },
+        }
+      );
+
+      // E. Research Bento Grid & Editorial Split
+      gsap.fromTo(
+        [".bento-col-1", ".bento-col-2", ".bento-col-3"],
+        { autoAlpha: 0, y: 35 },
+        {
+          autoAlpha: 1,
+          y: 0,
+          stagger: 0.14,
+          duration: 0.85,
+          ease: "power2.out",
+          clearProps: "transform,opacity,visibility",
+          scrollTrigger: {
+            trigger: "#research-bento",
+            start: "top 85%",
+            once: true,
+          },
+        }
+      );
+
+      gsap.fromTo(
+        ".bento-editorial-bottom > div",
+        { autoAlpha: 0, y: 28 },
+        {
+          autoAlpha: 1,
+          y: 0,
+          stagger: 0.15,
+          duration: 0.8,
+          ease: "power3.out",
+          clearProps: "transform,opacity,visibility",
+          scrollTrigger: {
+            trigger: ".bento-editorial-bottom",
+            start: "top 88%",
+            once: true,
+          },
+        }
+      );
+
+      // F. Safety Section: 3 Wireframe Cards & 3 Gradient Cards
+      gsap.fromTo(
+        ".safety-wireframe-card",
+        { autoAlpha: 0, y: 30 },
+        {
+          autoAlpha: 1,
+          y: 0,
+          stagger: 0.12,
+          duration: 0.75,
+          ease: "power2.out",
+          clearProps: "transform,opacity,visibility",
+          scrollTrigger: {
+            trigger: "#safety",
+            start: "top 85%",
+            once: true,
+          },
+        }
+      );
+
+      gsap.fromTo(
+        ".safety-gradient-card",
+        { autoAlpha: 0, y: 30 },
+        {
+          autoAlpha: 1,
+          y: 0,
+          stagger: 0.12,
+          duration: 0.8,
+          ease: "power2.out",
+          clearProps: "transform,opacity,visibility",
+          scrollTrigger: {
+            trigger: ".safety-gradient-grid",
+            start: "top 88%",
+            once: true,
+          },
+        }
+      );
+
+      // G. Interactive Demo Suite Reveal
+      gsap.fromTo(
+        "#interactive-demo .page-container",
+        { autoAlpha: 0, y: 32 },
+        {
+          autoAlpha: 1,
+          y: 0,
+          duration: 0.85,
+          ease: "power3.out",
+          clearProps: "transform,opacity,visibility",
+          scrollTrigger: {
+            trigger: "#interactive-demo",
+            start: "top 85%",
+            once: true,
+          },
+        }
+      );
+
+      // H. Academic Benchmark Table Rows & Reliability Metric Cards
+      gsap.fromTo(
+        ".benchmark-table-row",
+        { autoAlpha: 0, y: 18 },
+        {
+          autoAlpha: 1,
+          y: 0,
+          stagger: 0.07,
+          duration: 0.6,
+          ease: "power2.out",
+          clearProps: "transform,opacity,visibility",
+          scrollTrigger: {
+            trigger: "#benchmarks table",
+            start: "top 88%",
+            once: true,
+          },
+        }
+      );
+
+      gsap.fromTo(
+        ".benchmark-metric-card",
+        { autoAlpha: 0, y: 22 },
+        {
+          autoAlpha: 1,
+          y: 0,
+          stagger: 0.09,
+          duration: 0.7,
+          ease: "power2.out",
+          clearProps: "transform,opacity,visibility",
+          scrollTrigger: {
+            trigger: ".benchmark-metrics-grid",
+            start: "top 90%",
+            once: true,
+          },
+        }
+      );
+
+      // I. Testimonial Cards Reveal (Rock-Solid Idempotent fromTo with once: true)
+      gsap.fromTo(
+        ".testimonial-card",
+        { autoAlpha: 0, y: 28 },
+        {
+          autoAlpha: 1,
+          y: 0,
+          stagger: 0.12,
+          duration: 0.75,
+          ease: "power2.out",
+          clearProps: "transform,opacity,visibility",
+          scrollTrigger: {
+            trigger: ".testimonial-grid",
+            start: "top 90%",
+            once: true,
+          },
+        }
+      );
+
+      // J. Grand Finish Call to Action Banner Reveal
+      gsap.fromTo(
+        ".cta-banner-card",
+        { autoAlpha: 0, y: 32, scale: 0.97 },
+        {
+          autoAlpha: 1,
+          y: 0,
+          scale: 1,
+          duration: 0.85,
+          ease: "power2.out",
+          clearProps: "transform,opacity,visibility",
+          scrollTrigger: {
+            trigger: ".cta-banner-card",
+            start: "top 88%",
+            once: true,
+          },
+        }
+      );
     },
     { scope: pageRef }
   );
@@ -155,7 +455,7 @@ export default function LandingPage() {
       {/* =========================================================================
           2. PARTNER / TRUST LOGO STRIP (Matching Image 2 Bottom & Image 3)
           ========================================================================= */}
-      <section style={{ borderTop: "1px solid var(--color-stone)", borderBottom: "1px solid var(--color-stone)", padding: "24px 0", backgroundColor: "var(--color-warm-taupe)" }}>
+      <section className="hero-trust-strip" style={{ borderTop: "1px solid var(--color-stone)", borderBottom: "1px solid var(--color-stone)", padding: "24px 0", backgroundColor: "var(--color-warm-taupe)" }}>
         <div className="page-container">
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "20px" }}>
             <span style={{ fontSize: "11px", fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase", color: "var(--color-graphite)" }}>
@@ -344,6 +644,7 @@ export default function LandingPage() {
 
           {/* Second Row: Four Feature Cards (Matching Image 2 Lower Row) */}
           <div
+            className="studio-feature-grid"
             style={{
               display: "grid",
               gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
@@ -353,6 +654,7 @@ export default function LandingPage() {
           >
             {/* Feature 1: Prompt Injection */}
             <div
+              className="studio-feature-card"
               style={{
                 backgroundColor: "var(--color-warm-taupe)",
                 border: "1px solid var(--color-stone)",
@@ -387,6 +689,7 @@ export default function LandingPage() {
 
             {/* Feature 2: Secret Extraction */}
             <div
+              className="studio-feature-card"
               style={{
                 backgroundColor: "var(--color-warm-taupe)",
                 border: "1px solid var(--color-stone)",
@@ -422,6 +725,7 @@ export default function LandingPage() {
 
             {/* Feature 3: Persona Override */}
             <div
+              className="studio-feature-card"
               style={{
                 backgroundColor: "var(--color-warm-taupe)",
                 border: "1px solid var(--color-stone)",
@@ -459,6 +763,7 @@ export default function LandingPage() {
 
             {/* Feature 4: Policy Bypass */}
             <div
+              className="studio-feature-card"
               style={{
                 backgroundColor: "var(--color-warm-taupe)",
                 border: "1px solid var(--color-stone)",
@@ -533,6 +838,7 @@ export default function LandingPage() {
         <div className="page-container">
           {/* Header Row: Title on Left, Subtitle & Action on Right */}
           <div
+            className="section-reveal-header"
             style={{
               display: "flex",
               justifyContent: "space-between",
@@ -732,23 +1038,25 @@ export default function LandingPage() {
 
                     {/* V1 Line (Red - high attack success rate) */}
                     <path
+                      className="analytics-chart-path-v1"
                       d="M 20 40 Q 100 32, 200 48 T 380 44"
                       fill="none"
                       stroke="#e05244"
                       strokeWidth="2.5"
                     />
-                    <circle cx="200" cy="48" r="4" fill="#e05244" />
-                    <circle cx="380" cy="44" r="4" fill="#e05244" />
+                    <circle className="analytics-dot" cx="200" cy="48" r="4" fill="#e05244" />
+                    <circle className="analytics-dot" cx="380" cy="44" r="4" fill="#e05244" />
 
                     {/* V2 Line (Blue - dramatic drop in attack success rate) */}
                     <path
+                      className="analytics-chart-path-v2"
                       d="M 20 60 Q 100 80, 200 115 T 380 135"
                       fill="none"
                       stroke="#0447ff"
                       strokeWidth="2.5"
                     />
-                    <circle cx="200" cy="115" r="4" fill="#0447ff" />
-                    <circle cx="380" cy="135" r="4" fill="#0447ff" />
+                    <circle className="analytics-dot" cx="200" cy="115" r="4" fill="#0447ff" />
+                    <circle className="analytics-dot" cx="380" cy="135" r="4" fill="#0447ff" />
 
                     {/* Round Labels */}
                     <text x="20" y="155" fontSize="10" fill="#999" fontFamily="var(--font-mono)">Round 1</text>
@@ -772,6 +1080,7 @@ export default function LandingPage() {
 
           {/* Bottom Row: 3 Feature Cards (Matching Image 3 Bottom) */}
           <div
+            className="defensive-feature-grid"
             style={{
               display: "grid",
               gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
@@ -780,6 +1089,7 @@ export default function LandingPage() {
           >
             {/* Card 1: Testing */}
             <div
+              className="defensive-feature-card"
               style={{
                 backgroundColor: "var(--color-eggshell)",
                 border: "1px solid var(--color-stone)",
@@ -812,6 +1122,7 @@ export default function LandingPage() {
 
             {/* Card 2: Guardrails */}
             <div
+              className="defensive-feature-card"
               style={{
                 backgroundColor: "var(--color-eggshell)",
                 border: "1px solid var(--color-stone)",
@@ -843,6 +1154,7 @@ export default function LandingPage() {
 
             {/* Card 3: Workflows */}
             <div
+              className="defensive-feature-card"
               style={{
                 backgroundColor: "var(--color-eggshell)",
                 border: "1px solid var(--color-stone)",
@@ -886,7 +1198,7 @@ export default function LandingPage() {
       <section className="section" id="research-bento">
         <div className="page-container">
           {/* Header (Matching Image 4 Top) */}
-          <div style={{ textAlign: "center", maxWidth: "760px", margin: "0 auto 32px" }}>
+          <div className="section-reveal-header" style={{ textAlign: "center", maxWidth: "760px", margin: "0 auto 32px" }}>
             <h2 className="font-display" style={{ fontSize: "clamp(30px, 4vw, 44px)", marginBottom: "14px", color: "var(--color-ink)" }}>
               Showcasing the empirical rigor of prompt security research.
             </h2>
@@ -1152,6 +1464,7 @@ export default function LandingPage() {
 
           {/* Two-Column Editorial Section Below (Image 4 bottom) */}
           <div
+            className="bento-editorial-bottom"
             style={{
               display: "grid",
               gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 300px), 1fr))",
@@ -1185,7 +1498,10 @@ export default function LandingPage() {
       <section className="section section-band" id="safety">
         <div className="page-container">
           {/* Header Row: Title & Action */}
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "40px", flexWrap: "wrap", gap: "16px" }}>
+          <div
+            className="section-reveal-header"
+            style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "40px", flexWrap: "wrap", gap: "16px" }}
+          >
             <h2 className="font-display" style={{ fontSize: "36px" }}>
               Safety, built in.
             </h2>
@@ -1337,6 +1653,7 @@ export default function LandingPage() {
             </div>
 
             <div
+              className="safety-gradient-grid"
               style={{
                 display: "grid",
                 gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
@@ -1345,6 +1662,7 @@ export default function LandingPage() {
             >
               {/* Update Card 1 (Green Dawn Gradient) */}
               <div
+                className="safety-gradient-card"
                 style={{
                   borderRadius: "16px",
                   overflow: "hidden",
@@ -1373,6 +1691,7 @@ export default function LandingPage() {
 
               {/* Update Card 2 (Crimson Snow Gradient) */}
               <div
+                className="safety-gradient-card"
                 style={{
                   borderRadius: "16px",
                   overflow: "hidden",
@@ -1401,6 +1720,7 @@ export default function LandingPage() {
 
               {/* Update Card 3 (Ice to Night Gradient) */}
               <div
+                className="safety-gradient-card"
                 style={{
                   borderRadius: "16px",
                   overflow: "hidden",
@@ -1445,7 +1765,7 @@ export default function LandingPage() {
           ========================================================================= */}
       <section className="section section-band" id="benchmarks">
         <div className="page-container">
-          <div style={{ textAlign: "center", maxWidth: "680px", margin: "0 auto 40px" }}>
+          <div className="section-reveal-header" style={{ textAlign: "center", maxWidth: "680px", margin: "0 auto 40px" }}>
             <span className="tag-pill" style={{ marginBottom: "12px" }}>
               Empirical Findings
             </span>
@@ -1471,7 +1791,7 @@ export default function LandingPage() {
                 </tr>
               </thead>
               <tbody>
-                <tr>
+                <tr className="benchmark-table-row">
                   <td><strong>CampusBot (Helpdesk)</strong></td>
                   <td><code>ALPHA-7</code></td>
                   <td>70.0% &plusmn; 5.0% &rarr; 20.0% &plusmn; 5.0%</td>
@@ -1479,7 +1799,7 @@ export default function LandingPage() {
                   <td>0.0% &rarr; 6.7%</td>
                   <td><strong style={{ color: "var(--color-defense-held)" }}>PASS</strong></td>
                 </tr>
-                <tr>
+                <tr className="benchmark-table-row">
                   <td><strong>BistroBot (Restaurant)</strong></td>
                   <td><code>VIP-FEAST-99</code></td>
                   <td>60.0% &plusmn; 5.0% &rarr; 18.3% &plusmn; 2.9%</td>
@@ -1487,7 +1807,7 @@ export default function LandingPage() {
                   <td>0.0% &rarr; 1.7%</td>
                   <td><strong style={{ color: "var(--color-defense-held)" }}>PASS</strong></td>
                 </tr>
-                <tr>
+                <tr className="benchmark-table-row">
                   <td><strong>RefundBot (Support $50 Cap)</strong></td>
                   <td><code>ESCALATE-SEC-42</code></td>
                   <td>80.0% &plusmn; 5.0% &rarr; 30.0% &plusmn; 5.0%</td>
@@ -1495,7 +1815,7 @@ export default function LandingPage() {
                   <td>1.7% &rarr; 8.3%</td>
                   <td><strong style={{ color: "var(--color-defense-held)" }}>PASS</strong></td>
                 </tr>
-                <tr>
+                <tr className="benchmark-table-row">
                   <td><strong>Captain Blackbeard (Pirate Persona)</strong></td>
                   <td><code>TREASURE-LAT-49</code></td>
                   <td>50.0% &plusmn; 5.0% &rarr; 11.7% &plusmn; 2.9%</td>
@@ -1503,7 +1823,7 @@ export default function LandingPage() {
                   <td>0.0% &rarr; 3.3%</td>
                   <td><strong style={{ color: "var(--color-defense-held)" }}>PASS</strong></td>
                 </tr>
-                <tr>
+                <tr className="benchmark-table-row">
                   <td><strong>WeakBot (Naive Control)</strong></td>
                   <td><em>None</em></td>
                   <td>95.0% &plusmn; 5.0% &rarr; 45.0% &plusmn; 5.0%</td>
@@ -1517,31 +1837,32 @@ export default function LandingPage() {
 
           {/* Judge Reliability Metrics Box */}
           <div
+            className="benchmark-metrics-grid"
             style={{
               display: "grid",
               gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
               gap: "16px",
             }}
           >
-            <div className="bracket-card" style={{ padding: "20px" }}>
+            <div className="bracket-card benchmark-metric-card" style={{ padding: "20px" }}>
               <div style={{ fontSize: "11px", color: "var(--color-smoke)", textTransform: "uppercase" }}>Inter-Annotator Agreement</div>
               <div style={{ fontSize: "28px", fontWeight: 700, margin: "6px 0 2px" }}>92.0%</div>
               <div style={{ fontSize: "12px", color: "var(--color-defense-held)" }}>Double-blind consensus (50 pairs)</div>
             </div>
 
-            <div className="bracket-card" style={{ padding: "20px" }}>
+            <div className="bracket-card benchmark-metric-card" style={{ padding: "20px" }}>
               <div style={{ fontSize: "11px", color: "var(--color-smoke)", textTransform: "uppercase" }}>Judge vs Human Accuracy</div>
               <div style={{ fontSize: "28px", fontWeight: 700, margin: "6px 0 2px" }}>91.3%</div>
               <div style={{ fontSize: "12px", color: "var(--color-defense-held)" }}>Exceeds &ge; 85% course target</div>
             </div>
 
-            <div className="bracket-card" style={{ padding: "20px" }}>
+            <div className="bracket-card benchmark-metric-card" style={{ padding: "20px" }}>
               <div style={{ fontSize: "11px", color: "var(--color-smoke)", textTransform: "uppercase" }}>Cohen&apos;s Kappa (&kappa;)</div>
               <div style={{ fontSize: "28px", fontWeight: 700, margin: "6px 0 2px" }}>0.812</div>
               <div style={{ fontSize: "12px", color: "var(--color-defense-held)" }}>Substantial statistical reliability</div>
             </div>
 
-            <div className="bracket-card" style={{ padding: "20px" }}>
+            <div className="bracket-card benchmark-metric-card" style={{ padding: "20px" }}>
               <div style={{ fontSize: "11px", color: "var(--color-smoke)", textTransform: "uppercase" }}>Planted Canary Recall</div>
               <div style={{ fontSize: "28px", fontWeight: 700, margin: "6px 0 2px" }}>100%</div>
               <div style={{ fontSize: "12px", color: "var(--color-defense-held)" }}>Deterministic zero false negatives</div>
@@ -1555,7 +1876,7 @@ export default function LandingPage() {
           ========================================================================= */}
       <section className="section" id="testimonials">
         <div className="page-container">
-          <div style={{ textAlign: "center", maxWidth: "660px", margin: "0 auto 48px" }}>
+          <div className="section-reveal-header" style={{ textAlign: "center", maxWidth: "660px", margin: "0 auto 48px" }}>
             <span className="tag-pill" style={{ marginBottom: "12px" }}>
               Evaluator Endorsements
             </span>
@@ -1568,6 +1889,7 @@ export default function LandingPage() {
           </div>
 
           <div
+            className="testimonial-grid"
             style={{
               display: "grid",
               gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
@@ -1575,7 +1897,7 @@ export default function LandingPage() {
             }}
           >
             {/* Review 1 */}
-            <div className="bracket-card bracket-card-white">
+            <div className="bracket-card bracket-card-white testimonial-card">
               <div style={{ display: "flex", gap: "3px", marginBottom: "12px" }}>
                 {[...Array(5)].map((_, i) => (
                   <svg key={i} width="14" height="14" viewBox="0 0 16 16" fill="var(--color-ember-orange)">
@@ -1600,7 +1922,7 @@ export default function LandingPage() {
             </div>
 
             {/* Review 2 */}
-            <div className="bracket-card bracket-card-white">
+            <div className="bracket-card bracket-card-white testimonial-card">
               <div style={{ display: "flex", gap: "3px", marginBottom: "12px" }}>
                 {[...Array(5)].map((_, i) => (
                   <svg key={i} width="14" height="14" viewBox="0 0 16 16" fill="var(--color-ember-orange)">
@@ -1625,7 +1947,7 @@ export default function LandingPage() {
             </div>
 
             {/* Review 3 */}
-            <div className="bracket-card bracket-card-white">
+            <div className="bracket-card bracket-card-white testimonial-card">
               <div style={{ display: "flex", gap: "3px", marginBottom: "12px" }}>
                 {[...Array(5)].map((_, i) => (
                   <svg key={i} width="14" height="14" viewBox="0 0 16 16" fill="var(--color-ember-orange)">
@@ -1658,7 +1980,7 @@ export default function LandingPage() {
       <section className="section" style={{ paddingTop: "20px", paddingBottom: "100px" }}>
         <div className="page-container">
           <div
-            className="bracket-card"
+            className="bracket-card cta-banner-card"
             style={{
               backgroundColor: "var(--color-warm-taupe)",
               padding: "70px 40px",

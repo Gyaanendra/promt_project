@@ -12,21 +12,31 @@ export default function DefenseSphere() {
   useGSAP(
     () => {
       // 1. Entrance animation
-      gsap.from(".floating-card", {
-        scale: 0.88,
-        y: 20,
-        autoAlpha: 0,
-        stagger: 0.12,
-        duration: 0.85,
-        ease: "back.out(1.5)",
-      });
+      gsap.fromTo(
+        ".floating-card",
+        { scale: 0.88, y: 20, autoAlpha: 0 },
+        {
+          scale: 1,
+          y: 0,
+          autoAlpha: 1,
+          stagger: 0.12,
+          duration: 0.85,
+          ease: "back.out(1.5)",
+          clearProps: "transform,opacity,visibility",
+        }
+      );
 
-      gsap.from(".central-defense-lock", {
-        scale: 0.75,
-        autoAlpha: 0,
-        duration: 1.1,
-        ease: "elastic.out(1, 0.6)",
-      });
+      gsap.fromTo(
+        ".central-defense-lock",
+        { scale: 0.75, autoAlpha: 0 },
+        {
+          scale: 1,
+          autoAlpha: 1,
+          duration: 1.1,
+          ease: "elastic.out(1, 0.6)",
+          clearProps: "transform,opacity,visibility",
+        }
+      );
 
       // 2. Rotating Stamp Seal (Continuous 360 loop)
       gsap.to(".rotating-stamp", {

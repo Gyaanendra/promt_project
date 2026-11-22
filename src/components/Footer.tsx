@@ -1,11 +1,71 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import Link from "next/link";
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(useGSAP, ScrollTrigger);
 
 export default function Footer() {
   const [email, setEmail] = useState("");
   const [subscribed, setSubscribed] = useState(false);
+  const footerRef = useRef<HTMLElement>(null);
+
+  useGSAP(
+    () => {
+      // 1. Fine-Art Painted Background Parallax Scrub
+      gsap.to(".footer-portrait-img", {
+        yPercent: -12,
+        scale: 1.05,
+        ease: "none",
+        scrollTrigger: {
+          trigger: footerRef.current,
+          start: "top bottom",
+          end: "bottom top",
+          scrub: 1.2,
+        },
+      });
+
+      // 2. Floating Dispatch Copy & Pill Form Reveal on Scroll
+      gsap.fromTo(
+        ".footer-floating-content",
+        { autoAlpha: 0, y: 32 },
+        {
+          autoAlpha: 1,
+          y: 0,
+          duration: 0.85,
+          ease: "power3.out",
+          clearProps: "transform,opacity,visibility",
+          scrollTrigger: {
+            trigger: ".footer-hero-stage",
+            start: "top 80%",
+            once: true,
+          },
+        }
+      );
+
+      // 3. Footer Bottom Bar Reveal
+      gsap.fromTo(
+        ".footer-bottom-bar",
+        { autoAlpha: 0, y: 20 },
+        {
+          autoAlpha: 1,
+          y: 0,
+          duration: 0.75,
+          ease: "power2.out",
+          clearProps: "transform,opacity,visibility",
+          scrollTrigger: {
+            trigger: ".footer-bottom-bar",
+            start: "top 95%",
+            once: true,
+          },
+        }
+      );
+    },
+    { scope: footerRef }
+  );
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -16,6 +76,7 @@ export default function Footer() {
 
   return (
     <footer
+      ref={footerRef}
       style={{
         position: "relative",
         width: "100%",
@@ -41,6 +102,7 @@ export default function Footer() {
       >
         {/* Full-Bleed Fine-Art Painted Background Image */}
         <img
+          className="footer-portrait-img"
           src="/footer/water-portrait-v2.jpg"
           alt="Fine-art painted portrait of woman submerged in deep turquoise water with wild copper hair"
           style={{
@@ -67,6 +129,7 @@ export default function Footer() {
 
         {/* Floating Content ON TOP of the Background Artwork */}
         <div
+          className="footer-floating-content"
           style={{
             position: "relative",
             zIndex: 10,
@@ -177,6 +240,7 @@ export default function Footer() {
 
       {/* ==================== MINIMALIST FOOTER BASELINE ==================== */}
       <div
+        className="footer-bottom-bar"
         style={{
           backgroundColor: "#f5f3f1",
           borderTop: "1px solid var(--color-stone)",

@@ -35,7 +35,19 @@ export default function SmoothScroll() {
     gsap.ticker.add(updateTicker);
     gsap.ticker.lagSmoothing(0);
 
+    // Initial refresh to ensure ScrollTrigger positions align with hydrated layout
+    const refreshTimer = setTimeout(() => {
+      ScrollTrigger.refresh();
+    }, 250);
+
+    const onWindowLoad = () => {
+      ScrollTrigger.refresh();
+    };
+    window.addEventListener("load", onWindowLoad);
+
     return () => {
+      clearTimeout(refreshTimer);
+      window.removeEventListener("load", onWindowLoad);
       gsap.ticker.remove(updateTicker);
       lenis.destroy();
     };

@@ -4,9 +4,10 @@ import Link from "next/link";
 import { useRef } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-// Register useGSAP plugin once
-gsap.registerPlugin(useGSAP);
+// Register useGSAP & ScrollTrigger plugins once
+gsap.registerPlugin(useGSAP, ScrollTrigger);
 
 export default function MindlyHero() {
   const heroRef = useRef<HTMLElement>(null);
@@ -45,10 +46,8 @@ export default function MindlyHero() {
       .from(
         ".hero-centerpiece-img",
         {
-          y: 60,
-          scale: 0.98,
           autoAlpha: 0,
-          duration: 1.3,
+          duration: 1.1,
           ease: "power2.out",
         },
         "-=0.7"
@@ -65,16 +64,7 @@ export default function MindlyHero() {
         "-=0.8"
       );
 
-      // 2. Purposeful Continuous Floating & Rotating Loops
-      // Centerpiece weightless levitation
-      gsap.to(".hero-centerpiece-img", {
-        y: -10,
-        duration: 4.2,
-        repeat: -1,
-        yoyo: true,
-        ease: "sine.inOut",
-      });
-
+      // 2. Purposeful Continuous Floating & Rotating Loops (Centerpiece kept completely static)
       // Left card subtle drift
       gsap.to(".hero-floating-card-left", {
         y: -7,
@@ -100,7 +90,35 @@ export default function MindlyHero() {
         duration: 32,
         repeat: -1,
         ease: "none",
+        transformOrigin: "center center",
       });
+
+      // 3. Scroll-Linked Parallax Scrub (Outer floating elements drift; centerpiece remains static)
+      if (heroRef.current) {
+        gsap.to(".hero-floating-card-left", {
+          yPercent: -12,
+          xPercent: -4,
+          ease: "none",
+          scrollTrigger: {
+            trigger: heroRef.current,
+            start: "top top",
+            end: "bottom top",
+            scrub: 1.2,
+          },
+        });
+
+        gsap.to(".hero-floating-card-right", {
+          yPercent: -14,
+          xPercent: 4,
+          ease: "none",
+          scrollTrigger: {
+            trigger: heroRef.current,
+            start: "top top",
+            end: "bottom top",
+            scrub: 1.2,
+          },
+        });
+      }
     },
     { scope: heroRef }
   );
