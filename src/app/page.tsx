@@ -1,16 +1,138 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import MindlyHero from "@/components/MindlyHero";
 import InteractiveDemo from "@/components/InteractiveDemo";
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(useGSAP, ScrollTrigger);
 
 export default function LandingPage() {
   const [bentoTab, setBentoTab] = useState<"evals" | "studio">("evals");
   const [simulatedAttackRunning, setSimulatedAttackRunning] = useState(false);
   const [simulatedAttackOutcome, setSimulatedAttackOutcome] = useState<string | null>(null);
+  const pageRef = useRef<HTMLDivElement>(null);
+
+  useGSAP(
+    () => {
+      // 1. Live Scrubber Scan Bar Continuous Loop
+      gsap.to(".scrubber-scan-bar", {
+        width: "92%",
+        duration: 2.2,
+        repeat: -1,
+        yoyo: true,
+        ease: "sine.inOut",
+      });
+
+      // 2. OmniChannel Conversational Chat Bubbles Ambient Float Loops
+      gsap.to(".chat-bubble-float-1", {
+        y: -5,
+        duration: 3.2,
+        repeat: -1,
+        yoyo: true,
+        ease: "sine.inOut",
+      });
+      gsap.to(".chat-bubble-float-2", {
+        y: 4,
+        duration: 3.8,
+        repeat: -1,
+        yoyo: true,
+        ease: "sine.inOut",
+        delay: 0.3,
+      });
+      gsap.to(".chat-bubble-float-3", {
+        y: -4,
+        duration: 3.5,
+        repeat: -1,
+        yoyo: true,
+        ease: "sine.inOut",
+        delay: 0.6,
+      });
+
+      // 3. Section 6 Safety Wireframe Geometric Ambient Loops
+      gsap.to(".wireframe-ellipse", {
+        rotation: 12,
+        duration: 6,
+        repeat: -1,
+        yoyo: true,
+        ease: "sine.inOut",
+        transformOrigin: "center center",
+      });
+      gsap.to(".wireframe-cube", {
+        y: -6,
+        duration: 4.2,
+        repeat: -1,
+        yoyo: true,
+        ease: "sine.inOut",
+      });
+      gsap.to(".wireframe-circle-dashed", {
+        rotation: 360,
+        duration: 35,
+        repeat: -1,
+        ease: "none",
+        transformOrigin: "80px 65px",
+      });
+
+      // 4. ScrollTrigger Section Entrances
+      // Studio Section Cards
+      gsap.from(".studio-card", {
+        scrollTrigger: {
+          trigger: "#studio-overview",
+          start: "top 80%",
+        },
+        y: 35,
+        autoAlpha: 0,
+        stagger: 0.15,
+        duration: 0.85,
+        ease: "power2.out",
+      });
+
+      // Defensive Agents Cards
+      gsap.from(".defensive-card", {
+        scrollTrigger: {
+          trigger: "#defensive-agents",
+          start: "top 80%",
+        },
+        y: 35,
+        autoAlpha: 0,
+        stagger: 0.15,
+        duration: 0.85,
+        ease: "power2.out",
+      });
+
+      // Research Bento Cards
+      gsap.from([".bento-col-1", ".bento-col-2", ".bento-col-3"], {
+        scrollTrigger: {
+          trigger: "#research-bento",
+          start: "top 80%",
+        },
+        y: 40,
+        autoAlpha: 0,
+        stagger: 0.15,
+        duration: 0.9,
+        ease: "power2.out",
+      });
+
+      // Safety Wireframe Cards
+      gsap.from(".safety-wireframe-card", {
+        scrollTrigger: {
+          trigger: "#safety",
+          start: "top 80%",
+        },
+        y: 30,
+        autoAlpha: 0,
+        stagger: 0.12,
+        duration: 0.8,
+        ease: "power2.out",
+      });
+    },
+    { scope: pageRef }
+  );
 
   const handleRunSim = () => {
     setSimulatedAttackRunning(true);
@@ -22,7 +144,7 @@ export default function LandingPage() {
   };
 
   return (
-    <div style={{ backgroundColor: "var(--color-eggshell)", minHeight: "100vh", overflowX: "hidden" }}>
+    <div ref={pageRef} style={{ backgroundColor: "var(--color-eggshell)", minHeight: "100vh", overflowX: "hidden" }}>
       <Navbar current="landing" />
 
       {/* =========================================================================
@@ -67,6 +189,7 @@ export default function LandingPage() {
           >
             {/* Left Card: Rich Crimson/Amber Textured Gradient Background */}
             <div
+              className="studio-card"
               style={{
                 position: "relative",
                 borderRadius: "var(--radius-card-lg)",
@@ -94,6 +217,7 @@ export default function LandingPage() {
 
               {/* Floating Frosted Glass Security Inspector */}
               <div
+                className="frosted-inspector-box"
                 style={{
                   position: "relative",
                   zIndex: 2,
@@ -122,7 +246,7 @@ export default function LandingPage() {
                 {/* Scrubber / Waveform Scan Bar */}
                 <div style={{ marginTop: "16px", display: "flex", alignItems: "center", gap: "8px" }}>
                   <div style={{ flex: 1, height: "6px", backgroundColor: "#ebe8e4", borderRadius: "9999px", overflow: "hidden" }}>
-                    <div style={{ width: "68%", height: "100%", backgroundColor: "var(--color-ink)", borderRadius: "9999px" }} />
+                    <div className="scrubber-scan-bar" style={{ width: "68%", height: "100%", backgroundColor: "var(--color-ink)", borderRadius: "9999px" }} />
                   </div>
                   <span style={{ fontSize: "11px", fontWeight: 600, color: "var(--color-defense-held)" }}>
                     CANARY BLOCKED
@@ -143,6 +267,7 @@ export default function LandingPage() {
 
             {/* Right Card: Clean Warm Taupe Card with Live Simulation */}
             <div
+              className="studio-card"
               style={{
                 position: "relative",
                 borderRadius: "var(--radius-card-lg)",
@@ -449,6 +574,7 @@ export default function LandingPage() {
           >
             {/* Left Card: Deep Indigo Textured Gradient (/gradients/ice-night.png) */}
             <div
+              className="defensive-card"
               style={{
                 position: "relative",
                 borderRadius: "var(--radius-card-lg)",
@@ -478,6 +604,7 @@ export default function LandingPage() {
               <div style={{ position: "relative", zIndex: 2, display: "flex", flexDirection: "column", gap: "12px", maxWidth: "380px" }}>
                 {/* User bubble */}
                 <div
+                  className="chat-bubble-float-1"
                   style={{
                     alignSelf: "flex-end",
                     backgroundColor: "rgba(255, 255, 255, 0.22)",
@@ -495,6 +622,7 @@ export default function LandingPage() {
 
                 {/* Bot bubble */}
                 <div
+                  className="chat-bubble-float-2"
                   style={{
                     alignSelf: "flex-start",
                     backgroundColor: "rgba(255, 255, 255, 0.95)",
@@ -510,6 +638,7 @@ export default function LandingPage() {
 
                 {/* User bubble */}
                 <div
+                  className="chat-bubble-float-3"
                   style={{
                     alignSelf: "flex-end",
                     backgroundColor: "rgba(255, 255, 255, 0.22)",
@@ -527,6 +656,7 @@ export default function LandingPage() {
 
                 {/* Bot thinking bubble */}
                 <div
+                  className="chat-bubble-float-1"
                   style={{
                     alignSelf: "flex-start",
                     backgroundColor: "rgba(255, 255, 255, 0.95)",
@@ -557,6 +687,7 @@ export default function LandingPage() {
 
             {/* Right Card: Analytics & Resolution Curve */}
             <div
+              className="defensive-card"
               style={{
                 borderRadius: "var(--radius-card-lg)",
                 backgroundColor: "var(--color-eggshell)",
@@ -1083,6 +1214,7 @@ export default function LandingPage() {
           >
             {/* Card 1: Moderation (Intersecting Ellipses / Conic Wireframe) */}
             <div
+              className="safety-wireframe-card"
               style={{
                 backgroundColor: "var(--color-eggshell)",
                 border: "1px solid var(--color-stone)",
@@ -1098,7 +1230,7 @@ export default function LandingPage() {
                 <svg width="180" height="120" viewBox="0 0 200 120" fill="none">
                   <line x1="20" y1="60" x2="180" y2="60" stroke="#a59f97" strokeWidth="1" strokeDasharray="3 3" />
                   <line x1="100" y1="10" x2="100" y2="110" stroke="#a59f97" strokeWidth="1" strokeDasharray="3 3" />
-                  <ellipse cx="70" cy="60" rx="30" ry="45" stroke="#111111" strokeWidth="1.2" transform="rotate(-15 70 60)" />
+                  <ellipse className="wireframe-ellipse" cx="70" cy="60" rx="30" ry="45" stroke="#111111" strokeWidth="1.2" transform="rotate(-15 70 60)" />
                   <ellipse cx="130" cy="60" rx="25" ry="50" stroke="#111111" strokeWidth="1.2" />
                   <circle cx="100" cy="60" r="2" fill="#000" />
                   <line x1="40" y1="60" x2="160" y2="60" stroke="#000" strokeWidth="0.8" />
@@ -1116,6 +1248,7 @@ export default function LandingPage() {
 
             {/* Card 2: Accountability (3D Isometric Perspective Cube Wireframe) */}
             <div
+              className="safety-wireframe-card"
               style={{
                 backgroundColor: "var(--color-eggshell)",
                 border: "1px solid var(--color-stone)",
@@ -1128,7 +1261,7 @@ export default function LandingPage() {
               }}
             >
               <div style={{ height: "160px", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                <svg width="150" height="130" viewBox="0 0 160 140" fill="none">
+                <svg className="wireframe-cube" width="150" height="130" viewBox="0 0 160 140" fill="none">
                   {/* Outer Cube */}
                   <polygon points="80,15 140,48 140,105 80,135 20,105 20,48" stroke="#111111" strokeWidth="1.25" fill="none" />
                   {/* Internal isometric spokes */}
@@ -1154,6 +1287,7 @@ export default function LandingPage() {
 
             {/* Card 3: Provenance (Concentric Nested Circles Wireframe) */}
             <div
+              className="safety-wireframe-card"
               style={{
                 backgroundColor: "var(--color-eggshell)",
                 border: "1px solid var(--color-stone)",
@@ -1167,7 +1301,7 @@ export default function LandingPage() {
             >
               <div style={{ height: "160px", display: "flex", alignItems: "center", justifyContent: "center" }}>
                 <svg width="160" height="130" viewBox="0 0 160 130" fill="none">
-                  <circle cx="80" cy="65" r="54" stroke="#111111" strokeWidth="1" strokeDasharray="4 3" />
+                  <circle className="wireframe-circle-dashed" cx="80" cy="65" r="54" stroke="#111111" strokeWidth="1" strokeDasharray="4 3" />
                   <circle cx="80" cy="65" r="44" stroke="#111111" strokeWidth="1" />
                   <circle cx="80" cy="65" r="34" stroke="#111111" strokeWidth="1" strokeDasharray="3 3" />
                   <circle cx="80" cy="65" r="24" stroke="#111111" strokeWidth="1.2" />

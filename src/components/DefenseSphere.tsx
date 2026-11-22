@@ -1,16 +1,103 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useRef } from "react";
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
+
+gsap.registerPlugin(useGSAP);
 
 export default function DefenseSphere() {
-  const [mounted, setMounted] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  useGSAP(
+    () => {
+      // 1. Entrance animation
+      gsap.from(".floating-card", {
+        scale: 0.88,
+        y: 20,
+        autoAlpha: 0,
+        stagger: 0.12,
+        duration: 0.85,
+        ease: "back.out(1.5)",
+      });
+
+      gsap.from(".central-defense-lock", {
+        scale: 0.75,
+        autoAlpha: 0,
+        duration: 1.1,
+        ease: "elastic.out(1, 0.6)",
+      });
+
+      // 2. Rotating Stamp Seal (Continuous 360 loop)
+      gsap.to(".rotating-stamp", {
+        rotation: 360,
+        duration: 24,
+        repeat: -1,
+        ease: "none",
+        transformOrigin: "center center",
+      });
+
+      // 3. Central Topological Core Mesh (Slow harmonic counter-rotation)
+      gsap.to(".topological-core-mesh", {
+        rotation: -360,
+        duration: 45,
+        repeat: -1,
+        ease: "none",
+        transformOrigin: "160px 160px",
+      });
+
+      // 4. Subtle Outer Guardrail Orbit Breathing Loop
+      gsap.to(".topological-orbit-ring", {
+        scale: 1.03,
+        duration: 3.6,
+        repeat: -1,
+        yoyo: true,
+        ease: "sine.inOut",
+        transformOrigin: "160px 160px",
+      });
+
+      // 5. Purposeful Floating Cards Ambient Levitation Loops
+      gsap.to(".floating-card-tl", {
+        y: -8,
+        duration: 3.4,
+        repeat: -1,
+        yoyo: true,
+        ease: "sine.inOut",
+      });
+
+      gsap.to(".floating-card-bl", {
+        y: 7,
+        duration: 4.1,
+        repeat: -1,
+        yoyo: true,
+        ease: "sine.inOut",
+        delay: 0.35,
+      });
+
+      gsap.to(".floating-card-tr", {
+        y: -9,
+        duration: 3.8,
+        repeat: -1,
+        yoyo: true,
+        ease: "sine.inOut",
+        delay: 0.2,
+      });
+
+      gsap.to(".floating-card-br", {
+        y: 6,
+        duration: 4.5,
+        repeat: -1,
+        yoyo: true,
+        ease: "sine.inOut",
+        delay: 0.55,
+      });
+    },
+    { scope: containerRef }
+  );
 
   return (
     <div
+      ref={containerRef}
       style={{
         position: "relative",
         width: "100%",
@@ -81,7 +168,7 @@ export default function DefenseSphere() {
           <line x1="160" y1="20" x2="160" y2="300" stroke="#ebe8e4" strokeWidth="1" strokeDasharray="3 3" />
 
           {/* Subtle Outer Guardrail Orbit Rings */}
-          <circle cx="160" cy="160" r="148" stroke="#ebe8e4" strokeWidth="1" />
+          <circle className="topological-orbit-ring" cx="160" cy="160" r="148" stroke="#ebe8e4" strokeWidth="1" />
           <circle cx="160" cy="160" r="132" stroke="#ebe8e4" strokeWidth="1" strokeDasharray="4 4" />
           <circle cx="160" cy="160" r="110" stroke="#000000" strokeWidth="0.75" strokeOpacity="0.15" />
 
@@ -95,8 +182,8 @@ export default function DefenseSphere() {
             opacity="0.32"
           />
 
-          {/* Core Generative Ink Mesh (Bauhaus generative structure from Image 1) */}
-          <g transform="rotate(15 160 160)">
+          {/* Core Generative Ink Mesh (Bauhaus generative structure) */}
+          <g className="topological-core-mesh" transform="rotate(15 160 160)">
             <ellipse cx="160" cy="160" rx="92" ry="76" stroke="black" strokeWidth="1.25" fill="none" opacity="0.85" />
             <ellipse cx="160" cy="160" rx="76" ry="92" stroke="black" strokeWidth="1.25" fill="none" opacity="0.85" />
             <ellipse cx="160" cy="160" rx="60" ry="60" stroke="black" strokeWidth="1.5" fill="none" />
@@ -111,17 +198,19 @@ export default function DefenseSphere() {
           <circle cx="68" cy="160" r="4" fill="#0447ff" />
 
           {/* Center Guardrail Lock Indicator */}
-          <circle cx="160" cy="160" r="32" fill="#fdfcfc" stroke="black" strokeWidth="1.75" />
-          <path
-            d="M154 157V152C154 148.686 156.686 146 160 146C163.314 146 166 148.686 166 152V157M151 157H169C170.105 157 171 157.895 171 159V170C171 171.105 170.105 172 169 172H151C149.895 172 149 171.105 149 170V159C149 157.895 149.895 157 151 157Z"
-            stroke="black"
-            strokeWidth="1.75"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
+          <g className="central-defense-lock">
+            <circle cx="160" cy="160" r="32" fill="#fdfcfc" stroke="black" strokeWidth="1.75" />
+            <path
+              d="M154 157V152C154 148.686 156.686 146 160 146C163.314 146 166 148.686 166 152V157M151 157H169C170.105 157 171 157.895 171 159V170C171 171.105 170.105 172 169 172H151C149.895 172 149 171.105 149 170V159C149 157.895 149.895 157 151 157Z"
+              stroke="black"
+              strokeWidth="1.75"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </g>
         </svg>
 
-        {/* Rotating Circular Stamp Seal (Top Right corner of artwork as seen in Image 4) */}
+        {/* Rotating Circular Stamp Seal */}
         <div
           style={{
             position: "absolute",
@@ -153,11 +242,11 @@ export default function DefenseSphere() {
         </div>
       </div>
 
-      {/* Floating Glassmorphic Pill Cards (Inspired by Image 4) */}
+      {/* Floating Glassmorphic Pill Cards */}
       
       {/* 1. Top Left: Injection Shield */}
       <div
-        className="floating-card"
+        className="floating-card floating-card-tl"
         style={{
           position: "absolute",
           top: "30px",
@@ -179,7 +268,7 @@ export default function DefenseSphere() {
 
       {/* 2. Bottom Left: Canary Vault */}
       <div
-        className="floating-card"
+        className="floating-card floating-card-bl"
         style={{
           position: "absolute",
           bottom: "35px",
@@ -206,7 +295,7 @@ export default function DefenseSphere() {
 
       {/* 3. Top Right: Over-Refusal Check */}
       <div
-        className="floating-card"
+        className="floating-card floating-card-tr"
         style={{
           position: "absolute",
           top: "40px",
@@ -228,7 +317,7 @@ export default function DefenseSphere() {
 
       {/* 4. Bottom Right: Multi-Model Isolation */}
       <div
-        className="floating-card"
+        className="floating-card floating-card-br"
         style={{
           position: "absolute",
           bottom: "25px",

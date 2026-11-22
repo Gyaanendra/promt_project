@@ -1,17 +1,113 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useRef } from "react";
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
+
+// Register useGSAP plugin once
+gsap.registerPlugin(useGSAP);
 
 export default function MindlyHero() {
-  const [mounted, setMounted] = useState(false);
+  const heroRef = useRef<HTMLElement>(null);
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  useGSAP(
+    () => {
+      // 1. Master On-Load Entrance Timeline
+      const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
+
+      tl.from(".hero-headline", {
+        y: 40,
+        autoAlpha: 0,
+        duration: 1.05,
+      })
+      .from(
+        ".hero-subtitle",
+        {
+          y: 22,
+          autoAlpha: 0,
+          duration: 0.85,
+        },
+        "-=0.7"
+      )
+      .from(
+        ".hero-cta-btn",
+        {
+          scale: 0.92,
+          y: 16,
+          autoAlpha: 0,
+          stagger: 0.12,
+          duration: 0.65,
+          ease: "back.out(1.6)",
+        },
+        "-=0.5"
+      )
+      .from(
+        ".hero-centerpiece-img",
+        {
+          y: 60,
+          scale: 0.98,
+          autoAlpha: 0,
+          duration: 1.3,
+          ease: "power2.out",
+        },
+        "-=0.7"
+      )
+      .from(
+        [".hero-floating-card-left", ".hero-floating-card-right", ".hero-trust-left", ".hero-stamp-seal"],
+        {
+          autoAlpha: 0,
+          y: 20,
+          stagger: 0.1,
+          duration: 0.8,
+          ease: "power2.out",
+        },
+        "-=0.8"
+      );
+
+      // 2. Purposeful Continuous Floating & Rotating Loops
+      // Centerpiece weightless levitation
+      gsap.to(".hero-centerpiece-img", {
+        y: -10,
+        duration: 4.2,
+        repeat: -1,
+        yoyo: true,
+        ease: "sine.inOut",
+      });
+
+      // Left card subtle drift
+      gsap.to(".hero-floating-card-left", {
+        y: -7,
+        duration: 3.8,
+        repeat: -1,
+        yoyo: true,
+        ease: "sine.inOut",
+      });
+
+      // Right card subtle drift (desynced)
+      gsap.to(".hero-floating-card-right", {
+        y: 8,
+        duration: 4.4,
+        repeat: -1,
+        yoyo: true,
+        ease: "sine.inOut",
+        delay: 0.5,
+      });
+
+      // Rotating architectural stamp
+      gsap.to(".rotating-stamp", {
+        rotation: 360,
+        duration: 32,
+        repeat: -1,
+        ease: "none",
+      });
+    },
+    { scope: heroRef }
+  );
 
   return (
     <section
+      ref={heroRef}
       className="hero-viewport"
       style={{
         position: "relative",
@@ -101,6 +197,7 @@ export default function MindlyHero() {
           </h1>
 
           <p
+            className="hero-subtitle"
             style={{
               fontSize: "17px",
               lineHeight: 1.6,
@@ -127,7 +224,7 @@ export default function MindlyHero() {
           >
             <Link
               href="/app"
-              className="btn-pill btn-pill-primary"
+              className="btn-pill btn-pill-primary hero-cta-btn"
               style={{
                 padding: "13px 32px",
                 fontSize: "15px",
@@ -142,7 +239,7 @@ export default function MindlyHero() {
 
             <a
               href="#interactive-demo"
-              className="btn-pill btn-pill-secondary"
+              className="btn-pill btn-pill-secondary hero-cta-btn"
               style={{
                 padding: "13px 28px",
                 fontSize: "15px",
@@ -416,6 +513,7 @@ export default function MindlyHero() {
           >
             {/* Subtle atmospheric radial spotlight behind the centerpiece */}
             <div
+              className="hero-spotlight-pulse"
               style={{
                 position: "absolute",
                 top: "10%",
@@ -441,6 +539,7 @@ export default function MindlyHero() {
               }}
             >
               <img
+                className="hero-centerpiece-img"
                 src="/hero/guardrail-centerpiece.png"
                 alt="AI Prompt Security Researcher surrounded by 3D Guardrail Panels"
                 style={{
