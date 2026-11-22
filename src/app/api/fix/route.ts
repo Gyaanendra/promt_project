@@ -14,10 +14,14 @@ interface Failure {
 }
 
 function parseFailures(raw: unknown): Failure[] {
-  if (!Array.isArray(raw) || raw.length > 20) {
-    throw new HttpError(400, '"failures" must be an array of at most 20 items.');
+  if (!Array.isArray(raw) || raw.length > 12) {
+    throw new HttpError(400, '"failures" must be an array of at most 12 items.');
   }
-  return raw.map((f) => {
+  let totalChars = 0;
+  const MAX_TOTAL_CHARS = 15_000;
+  const list: Failure[] = [];
+
+  for (const f of raw) {
     const o = f as Record<string, unknown>;
     if (
       typeof o?.attack !== "string" ||
@@ -28,13 +32,23 @@ function parseFailures(raw: unknown): Failure[] {
     ) {
       throw new HttpError(400, "Each failure needs category, attack, response and reason.");
     }
-    return {
+    const attack = o.attack.slice(0, LIMITS.attack);
+    const response = o.response.slice(0, LIMITS.response);
+    const reason = o.reason.slice(0, 500);
+
+    const itemChars = attack.length + response.length + reason.length;
+    if (totalChars + itemChars > MAX_TOTAL_CHARS && list.length > 0) {
+      break; // preserve token budget for the fixer prompt
+    }
+    totalChars += itemChars;
+    list.push({
       category: o.category as Category,
-      attack: o.attack.slice(0, LIMITS.attack),
-      response: o.response.slice(0, LIMITS.response),
-      reason: o.reason.slice(0, 500),
-    };
-  });
+      attack,
+      response,
+      reason,
+    });
+  }
+  return list;
 }
 
 export async function POST(req: Request) {
